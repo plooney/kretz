@@ -79,51 +79,26 @@ TransformPoint(const InputPointType &point) const
     y = point[1];
     z = point[2];
 
-    double pRB, pVAngle, pBAngle;
+    double pRB, phi, theta;
     double xsq, ysq, zsq, rDsq, tworDz, tmpone, tmptwo, tmpthree, denom;
 
-    /*rDsq = std::pow(m_BModeRadius,2);
-    zsq = std::pow(z,2);
-    ysq = std::pow(y,2);
-    tworDz = 2*m_BModeRadius*z;
-    xsq = std::pow(x,2);
-    tmpone = rDsq + ysq + zsq -tworDz;
-    tmptwo = xsq + ysq + zsq - tworDz + 2*rDsq;
-    tmpthree = std::sqrt(tmpone)*2*m_BModeRadius;
-    pRB = std::sqrt(tmptwo+tmpthree);
-    pBAngle = std::asin(x/pRB);
-    //Sign difference from Gordon's thesis. Consistent with segmentations.
-    //Need to check if correct with medical image
-    pVAngle = -std::asin(y/(m_BModeRadius-pRB*cos(pBAngle)));
-    */
 
-    rDsq = std::pow(m_BModeRadius,2);
-    zsq = std::pow(z,2);
-    ysq = std::pow(y,2);
-    tworDz = 2*m_BModeRadius*z;
-    xsq = std::pow(x,2);
-    tmpone = rDsq + ysq + zsq -tworDz;
-    tmptwo = xsq + ysq + zsq - tworDz + 2*rDsq;
-    tmpthree = std::sqrt(tmpone)*2*m_BModeRadius;
-    pRB = std::sqrt(tmptwo+tmpthree);
-    pBAngle = std::asin(x/pRB);
-    //Sign difference from Gordon's thesis. Consistent with segmentations.
-    //Need to check if correct with medical image
-    denom = std::sqrt(std::pow(pRB,2)-std::pow(x,2));
-    pVAngle = std::asin(y/(m_BModeRadius-denom));
+    phi = std::atan(y/(m_BModeRadius-z));
+    double arg1 = std::pow( m_BModeRadius - (y / std::sin(phi)), 2);
+    double arg2 = std::pow( x, 2);
+    pRB = std::sqrt( arg1 + arg2 );
+    theta = std::asin(x/pRB); 
+    pRB -= m_SweepRadius;
 
-    double b = pBAngle;
-    double v = pVAngle;
 
     if(m_TableAngles1.size() > 0 && m_TableAngles2.size() > 0){
-        pRB -= m_SweepRadius;
         opoint[0] = pRB/m_Resolution;
-        opoint[1] = Interpolate(b,m_TableAngles1);
-        opoint[2] = Interpolate(v,m_TableAngles2);
+        opoint[1] = Interpolate(theta,m_TableAngles1);
+        opoint[2] = Interpolate(phi,m_TableAngles2);
     } else {
         opoint[0] = pRB;
-        opoint[1] = b;
-        opoint[2] = v;
+        opoint[1] = theta;
+        opoint[2] = phi;
     }
 
     return opoint;

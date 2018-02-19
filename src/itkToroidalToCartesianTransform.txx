@@ -42,6 +42,22 @@ void ToroidalToCartesianTransform<TScalarType, NDimensions>::SetTable2(const Tab
     m_TableAngles2 = table;
 }
 
+template<class TScalarType, unsigned int NDimensions>
+double ToroidalToCartesianTransform<TScalarType, NDimensions>::Interpolate(double x, std::vector<std::pair<double,double>> table) const {
+    // Assumes that "table" is sorted by .first
+    // Check if x is out of bound
+    if (x > table.back().first) return std::numeric_limits<double>::max();
+    if (x < table[0].first) return -std::numeric_limits<double>::max();
+    std::vector<std::pair<double, double> >::iterator it, it2;
+    // INFINITY is defined in math.h in the glibc implementation
+    it = std::lower_bound(table.begin(), table.end(), std::make_pair(x, -std::numeric_limits<double>::max()));
+    // Corner case
+    if (it == table.begin()) return it->second;
+    it2 = it;
+    --it2;
+    return it2->second + (it->second - it2->second)*(x - it2->first)/(it->first - it2->first);
+}
+
 
 // Transform a point
 template<class TScalarType, unsigned int NDimensions>
@@ -58,22 +74,21 @@ TransformPoint(const InputPointType &point) const
     OutputPointType opoint;
     double x,y,z;
 
-    double b, v, rB;
+    double theta, phi, rB;
 
-    b = m_TableAngles1.at(point[1]).first;
-    v = m_TableAngles2.at(point[2]).second;
+    phi = m_TableAngles2[point[2]].first;
+    theta = m_TableAngles1[point[1]].first;
     rB = m_Resolution*point[0] + m_SweepRadius;
 
+    double sinPhi = std::sin(phi);
+    double cosPhi = std::cos(phi);
 
-    double sinvAngle=std::sin(v);
-    double cosvAngle=std::cos(v);
+    double sinTheta = std::sin(theta);
+    double cosTheta = std::cos(theta);
 
-    double sinbAngle=std::sin(b);
-    double cosbAngle=std::cos(b);
-
-    x = rB*sinbAngle;
-    y = -sinvAngle*(rB*cosbAngle-m_BModeRadius);
-    z = m_BModeRadius*(cosvAngle-1)+rB*cosbAngle*cosvAngle;
+    x = rB*sinTheta;
+    y = -sinPhi*(rB*cosTheta -m_BModeRadius);
+    z = m_BModeRadius*(1-cosPhi)+rB*cosTheta*cosPhi;
 
     opoint[0] = x;
     opoint[1] = y;

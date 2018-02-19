@@ -174,7 +174,7 @@ protected:
 private:
     ToroidalToCartesianTransform(const Self&); //purposely not implemented
     void operator=(const Self&); //purposely not implemented
-    //virtual double Interpolate(double x, TableType table) const;
+    virtual double Interpolate(double x, TableType table) const;
 
 }; //class ToroidalToCartesianTransform
 

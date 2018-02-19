@@ -138,19 +138,19 @@ int main(int ,char *[] )
     c2t->SetBModeRadius(rD);
     c2t->SetSweepRadius(rBstart);
     c2t->SetResolution(rResol);
-    c2t->SetTable1(TableAngles2);
-    c2t->SetTable2(TableAngles1);
+    c2t->SetTable1(TableAngles1);
+    c2t->SetTable2(TableAngles2);
 
     t2c->SetBModeRadius(rD);
     t2c->SetSweepRadius(rBstart);
     t2c->SetResolution(rResol);
-    t2c->SetTable1(TableAngles2);
-    t2c->SetTable2(TableAngles1);
+    t2c->SetTable1(TableAngles1);
+    t2c->SetTable2(TableAngles2);
 
     ImageType::PointType p1;
-    p1[0] = -100;
-    p1[1] = 100;
-    p1[2] = 100;
+    p1[0] = -10;
+    p1[1] = 10;
+    p1[2] = 10;
     ImageType::PointType p2 = c2t->TransformPoint(p1);
     ImageType::PointType p3 = t2c->TransformPoint(p2);
     std::cout << p1 << p2 << p3 << std::endl;
@@ -237,12 +237,18 @@ int main(int ,char *[] )
 
     double fn_error = metric->GetFalseNegativeError();
     double fp_error = metric->GetFalsePositiveError();
-    double overlap = metric->GetTargetOverlap(1);
+    double overlap1 = metric->GetTargetOverlap(1);
+    double overlap2 = metric->GetTargetOverlap(2);
+    double overlap3 = metric->GetTargetOverlap(3);
+    double overlap4 = metric->GetTargetOverlap(4);
     double mean_overlap = metric->GetMeanOverlap();
 
     std::cout << "FN error: " << fn_error << std::endl;
     std::cout << "FP error: " << fp_error << std::endl;
-    std::cout << "Overlap: " << overlap << std::endl;
+    std::cout << "Overlap 1: " << overlap1 << std::endl;
+    std::cout << "Overlap 2: " << overlap2 << std::endl;
+    std::cout << "Overlap 3: " << overlap3 << std::endl;
+    std::cout << "Overlap 4: " << overlap4 << std::endl;
     std::cout << "Mean overlap: " << mean_overlap << std::endl;
 
     if(mean_overlap < 0.99) {
