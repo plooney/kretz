@@ -72,8 +72,8 @@ TransformPoint(const InputPointType &point) const
     double cosbAngle=std::cos(b);
 
     x = rB*sinbAngle;
-    y = sinvAngle*(rB*cosbAngle-m_BModeRadius);
-    z = -m_BModeRadius*(cosvAngle-1)+rB*cosbAngle*cosvAngle;
+    y = -sinvAngle*(rB*cosbAngle-m_BModeRadius);
+    z = m_BModeRadius*(cosvAngle-1)+rB*cosbAngle*cosvAngle;
 
     opoint[0] = x;
     opoint[1] = y;

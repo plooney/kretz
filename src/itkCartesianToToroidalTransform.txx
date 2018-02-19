@@ -80,7 +80,22 @@ TransformPoint(const InputPointType &point) const
     z = point[2];
 
     double pRB, pVAngle, pBAngle;
-    double xsq, ysq, zsq, rDsq, tworDz, tmpone, tmptwo, tmpthree;
+    double xsq, ysq, zsq, rDsq, tworDz, tmpone, tmptwo, tmpthree, denom;
+
+    /*rDsq = std::pow(m_BModeRadius,2);
+    zsq = std::pow(z,2);
+    ysq = std::pow(y,2);
+    tworDz = 2*m_BModeRadius*z;
+    xsq = std::pow(x,2);
+    tmpone = rDsq + ysq + zsq -tworDz;
+    tmptwo = xsq + ysq + zsq - tworDz + 2*rDsq;
+    tmpthree = std::sqrt(tmpone)*2*m_BModeRadius;
+    pRB = std::sqrt(tmptwo+tmpthree);
+    pBAngle = std::asin(x/pRB);
+    //Sign difference from Gordon's thesis. Consistent with segmentations.
+    //Need to check if correct with medical image
+    pVAngle = -std::asin(y/(m_BModeRadius-pRB*cos(pBAngle)));
+    */
 
     rDsq = std::pow(m_BModeRadius,2);
     zsq = std::pow(z,2);
@@ -94,7 +109,8 @@ TransformPoint(const InputPointType &point) const
     pBAngle = std::asin(x/pRB);
     //Sign difference from Gordon's thesis. Consistent with segmentations.
     //Need to check if correct with medical image
-    pVAngle = -std::asin(y/(m_BModeRadius-pRB*cos(pBAngle)));
+    denom = std::sqrt(std::pow(pRB,2)-std::pow(x,2));
+    pVAngle = std::asin(y/(m_BModeRadius-denom));
 
     double b = pBAngle;
     double v = pVAngle;
