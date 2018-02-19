@@ -72,6 +72,40 @@ ImageType::Pointer createImage(ImageType::SizeType size)
             }
         }
     }
+
+
+    for(unsigned int r = 40; r < 50; r++)
+    {
+        for(unsigned int c = 40; c < 50; c++)
+        {
+            for(unsigned int s = 40; s < 50; s++)
+            {
+                ImageType::IndexType pixelIndex;
+                pixelIndex[0] = r;
+                pixelIndex[1] = c;
+                pixelIndex[2] = s;
+
+                returnImage->SetPixel(pixelIndex, 3);
+            }
+        }
+    }
+
+    for(unsigned int r = size[0]-50; r < size[0]-40; r++)
+    {
+        for(unsigned int c = size[1]-50; c <size[1]-40; c++)
+        {
+            for(unsigned int s = size[2]-50; s < size[2]-40; s++)
+            {
+                ImageType::IndexType pixelIndex;
+                pixelIndex[0] = r;
+                pixelIndex[1] = c;
+                pixelIndex[2] = s;
+
+                returnImage->SetPixel(pixelIndex, 4);
+            }
+        }
+    }
+
     return returnImage;
 }
 
@@ -94,9 +128,6 @@ int main(int ,char *[] )
     ImageType::DirectionType direction;
     direction.SetIdentity();
 
-    ImageType::SizeType size;
-    size.Fill(300);
-
     double rBstart=41.599998474121094;
     double rD=-19.170000076293945;
     double rResol =0.20533333718776703;
@@ -107,14 +138,14 @@ int main(int ,char *[] )
     c2t->SetBModeRadius(rD);
     c2t->SetSweepRadius(rBstart);
     c2t->SetResolution(rResol);
-    c2t->SetTable1(TableAngles1);
-    c2t->SetTable2(TableAngles2);
+    c2t->SetTable1(TableAngles2);
+    c2t->SetTable2(TableAngles1);
 
     t2c->SetBModeRadius(rD);
     t2c->SetSweepRadius(rBstart);
     t2c->SetResolution(rResol);
-    t2c->SetAngles1(angles1);
-    t2c->SetAngles2(angles2);
+    t2c->SetTable1(TableAngles2);
+    t2c->SetTable2(TableAngles1);
 
     ImageType::PointType p1;
     p1[0] = -100;

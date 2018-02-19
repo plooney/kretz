@@ -50,15 +50,15 @@ public:
     typedef Transform< TScalarType, NDimensions, NDimensions > Superclass;
     typedef SmartPointer<Self>        Pointer;
     typedef SmartPointer<const Self>  ConstPointer;
-    typedef std::vector<double> AngleVectorType;
+    typedef std::vector<std::pair<double, double> > TableType;
 
     /** Variables specific to geometry*/
     double m_BModeRadius;
     double m_SweepRadius;
     double m_Resolution;
 
-    std::vector<double> m_Angles1;
-    std::vector<double> m_Angles2;
+    TableType m_TableAngles1;
+    TableType m_TableAngles2;
 
     /** New macro for creation of through the object factory.*/
     itkNewMacro( Self )
@@ -154,8 +154,8 @@ public:
         //return this->m_Jacobian;
     }
 
-    virtual void SetAngles1(const AngleVectorType);
-    virtual void SetAngles2(const AngleVectorType);
+    virtual void SetTable1(const TableType);
+    virtual void SetTable2(const TableType);
 
     virtual void SetParameters(const ParametersType &){
 

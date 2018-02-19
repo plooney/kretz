@@ -100,8 +100,6 @@ KretzImageIO::~KretzImageIO()
   //delete this->m_KretzHeader;
 }
 
-// This method will only test if the header looks like a
-// GDCM image file.
 bool KretzImageIO::CanReadFile(const char *filename)
 {
   std::ifstream file;
@@ -168,13 +166,8 @@ void KretzImageIO::Read(void *buffer)
     
     if(tag==ImageTag){
 	    
-	//unsigned short * dimension_x = new unsigned short[VMvalue]; 
-	//buffer = new unsigned char[taglength];
-        //inputFileStream.read(reinterpret_cast<char *>(dimension_x), VMvalue * sizeof(unsigned short)); 
         inputFileStream.read(reinterpret_cast<char *>(buffer), taglength); 
 	std::cout << "Found image data len: " << taglength  << std::endl;
-	//memcpy(pointer, data, taglength); 
-	//std::cout << image_data[0] << std::endl;
     } 
     else {
       inputFileStream.seekg(taglength,std::ios::cur);
@@ -318,35 +311,48 @@ void KretzImageIO::ReadImageInformation()
     else if(tag==ResolutionTag){
         double value;
         inputFileStream.read(reinterpret_cast<char *>(&value), taglength); 
-	this->SetResolution(value);
+	this->m_Resolution = value *1000.0;
     } 
     else if(tag==Offset1Tag){
         double value;
         inputFileStream.read(reinterpret_cast<char *>(&value), taglength); 
-	this->SetOffset1(value);
+	this->m_Offset1 = value;
     } 
     else if(tag==Offset2Tag){
         double value;
         inputFileStream.read(reinterpret_cast<char *>(&value), taglength); 
-	this->SetOffset2(value);
+	this->m_Offset2 = value;
     } 
     else if(tag==Angles1Tag){
-        for(int i =0; i < taglength/sizeof(double); i++){
-       	    double value;
-	    inputFileStream.read(reinterpret_cast<char *>(&value), sizeof( double )); 
-	    this->m_TableAngles1.push_back(std::make_pair(value, i));
-        }
+        int len = taglength/sizeof(double);
+	double * angles = new double[len];
+        inputFileStream.read(reinterpret_cast<char *>(angles), sizeof( double ) * len); 
+        double amin = angles[0];
+        double amax = angles[len-1];
+	double bCentre = (amin+amax)/2;
+	for(int i=0; i<len;i++){
+            double angle = angles[i]-bCentre;
+	    this->m_TableAngles2.push_back(std::make_pair(angle, i));
+	}
+	delete angles;
     } 
     else if(tag==Angles2Tag){
-        for(int i =0; i < taglength/sizeof(double); i++){
-       	    double value;
-	    inputFileStream.read(reinterpret_cast<char *>(&value), sizeof( double )); 
-	    this->m_TableAngles2.push_back(std::make_pair(value, i));
-        }
+        int len = taglength/sizeof(double);
+	double * angles = new double[len];
+        inputFileStream.read(reinterpret_cast<char *>(angles), sizeof( double ) * len); 
+        double amin = angles[0];
+        double amax = angles[len-1];
+	double bCentre = (amin+amax)/2;
+	for(int i=0; i<len;i++){
+            double angle = angles[i]-bCentre;
+	    this->m_TableAngles1.push_back(std::make_pair(angle, i));
+	}
+	delete angles;
     } 
     else {
       inputFileStream.seekg(taglength,std::ios::cur);
     }
+
 
     //After we've read the data, need to check we're still in line with the file.
     if((int)inputFileStream.tellg()!=searchIterator+taglength){
@@ -356,16 +362,18 @@ void KretzImageIO::ReadImageInformation()
       inputFileStream.seekg(taglength,std::ios::cur);
     }
   }
+  m_rBstart = m_Offset1*m_Resolution;
+  m_rD = -m_Offset2*m_Resolution;
+
   inputFileStream.close();
   MetaDataDictionary & dico = this->GetMetaDataDictionary();
 
-  std::cout << "here" << std::endl;
 }
 
+/*
 void KretzImageIO::InternalReadImageInformation()
 {
   // ensure file can be opened for reading, before doing any more work
-/*
   // In general this should be relatively safe to assume
   gdcm::ImageHelper::SetForceRescaleInterceptSlope(true);
 
@@ -690,8 +698,8 @@ void KretzImageIO::InternalReadImageInformation()
         }
       }
     }
-*/
 }
+*/
 
 bool KretzImageIO::CanWriteFile(const char *name)
 {

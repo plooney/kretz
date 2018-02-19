@@ -128,25 +128,28 @@ public:
   itkGetEnumMacro(CompressionType, TCompressionType);
 
   typedef std::vector<std::pair<double, double>> TTableAngleType;
-  TTableAngleType m_TableAngles1;
-  TTableAngleType m_TableAngles2;
+  std::vector<std::pair<double, double>> m_TableAngles1;
+  std::vector<std::pair<double, double>> m_TableAngles2;
 
-  itkSetMacro(Offset1, double);
-  itkGetMacro(Offset1, double);
-  itkGetMacro(Offset2, double);
-  itkSetMacro(Offset2, double);
+  itkSetMacro(rBstart, double);
+  itkGetMacro(rBstart, double);
+  itkGetMacro(rD, double);
+  itkSetMacro(rD, double);
   itkGetMacro(Resolution, double);
   itkSetMacro(Resolution, double);
+
 
 protected:
   KretzImageIO();
   ~KretzImageIO() ITK_OVERRIDE;
   virtual void PrintSelf(std::ostream & os, Indent indent) const ITK_OVERRIDE;
 
-  void InternalReadImageInformation();
   double m_Offset1;
   double m_Offset2;
   double m_Resolution;
+  double m_rBstart;
+  double m_rD;
+
 
 
 private:
@@ -160,7 +163,6 @@ private:
   TCompressionType m_CompressionType;
 
   ImageIOBase::IOComponentType m_InternalComponentType;
-  InternalHeader *             m_KRETZHeader;
 };
 } // end namespace itk
 

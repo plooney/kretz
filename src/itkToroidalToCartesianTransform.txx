@@ -33,14 +33,15 @@ PrintSelf(std::ostream &os, Indent indent) const
 }
 
 template<class TScalarType, unsigned int NDimensions>
-void ToroidalToCartesianTransform<TScalarType, NDimensions>::SetAngles1(const AngleVectorType table){
-    m_Angles1 = table;
+void ToroidalToCartesianTransform<TScalarType, NDimensions>::SetTable1(const TableType table){
+    m_TableAngles1 = table;
 }
 
 template<class TScalarType, unsigned int NDimensions>
-void ToroidalToCartesianTransform<TScalarType, NDimensions>::SetAngles2(const AngleVectorType table){
-    m_Angles2 = table;
+void ToroidalToCartesianTransform<TScalarType, NDimensions>::SetTable2(const TableType table){
+    m_TableAngles2 = table;
 }
+
 
 // Transform a point
 template<class TScalarType, unsigned int NDimensions>
@@ -59,8 +60,8 @@ TransformPoint(const InputPointType &point) const
 
     double b, v, rB;
 
-    b = m_Angles1[point[1]];
-    v = m_Angles2[point[2]];
+    b = m_TableAngles1.at(point[1]).first;
+    v = m_TableAngles2.at(point[2]).second;
     rB = m_Resolution*point[0] + m_SweepRadius;
 
 
