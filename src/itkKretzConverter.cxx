@@ -72,6 +72,7 @@ BoundingBoxType::BoundsArrayType computeBounds(ImageType::Pointer image, T2CTran
     p[1] = index[1];
     p[2] = index[2];
     ImageType::PointType p_cart = t2c->TransformPoint(p); 
+    
     unsigned long i = mesh->GetNumberOfPoints();
     mesh->SetPoint(i, p_cart);
     ++imageIterator;
