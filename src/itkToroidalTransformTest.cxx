@@ -156,11 +156,11 @@ int main(int ,char *[] )
     std::cout << p1 << p2 << p3 << std::endl;
 
     ImageType::PointType cartesianOrigin;
-    cartesianOrigin[0] = -92.81173706054688;
-    cartesianOrigin[1] = -95.04386901855469;
-    cartesianOrigin[2] = 30.098983764648438;
+    cartesianOrigin[0] = -122.81173706054688;
+    cartesianOrigin[1] = -125.04386901855469;
+    cartesianOrigin[2] = 20.098983764648438;
 
-    ImageType::SizeType cartesian_size = {310, 318, 218};
+    ImageType::SizeType cartesian_size = {410, 418, 318};
     ImageType::SizeType size_toroidal = {580, 180, 142};
 
     typedef itk::ResampleImageFilter<ImageType,ImageType> ResampleFilterType;
@@ -193,9 +193,9 @@ int main(int ,char *[] )
     origin.Fill(0);
 
     ImageType::SizeType size_toroidal_output;
-    size_toroidal_output[0] = size_toroidal[0] + 20;
-    size_toroidal_output[1] = size_toroidal[1] + 20;
-    size_toroidal_output[2] = size_toroidal[2] + 20;
+    size_toroidal_output[0] = size_toroidal[0];
+    size_toroidal_output[1] = size_toroidal[1];
+    size_toroidal_output[2] = size_toroidal[2];
 
     ImageType::SpacingType spacing;
     spacing.Fill(1);

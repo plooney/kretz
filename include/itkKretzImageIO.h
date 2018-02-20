@@ -43,7 +43,26 @@ public:
     if(this->group == other.group && this->element==other.element) return true;
     else return false;
   }
+  operator std::string() const { 
+	  std::stringstream stream;
+	  stream << std::hex << this->group;
+	  std::string result1( stream.str() );
+
+	  stream << std::hex << this->element;
+	  std::string result2( stream.str() );
+	  std::string result(result1 + "|" + result2);
+
+	  return result;
+  }
 };
+
+inline
+std::ostream & operator<<(std::ostream & Str, Tag const & v) { 
+	  std::string string(v);
+	  Str << string; 
+	  return Str;
+};
+
 static Tag PatientTag(0x0110, 0x0002);
 static Tag DimensionXTag(0xc000, 0x0001);
 static Tag DimensionYTag(0xc000, 0x0002);
@@ -67,11 +86,8 @@ static Tag Image4dTag(0xd600, 0x0001);
  *
  *  \ingroup IOFilters
  *
- * \ingroup ITKIOGDCM
+ * \ingroup ITKIOKRETZ
  *
- * \wiki
- * \wikiexample{DICOM/ResampleDICOM,Resample a DICOM series}
- * \endwiki
  */
 class InternalHeader;
 class KretzImageIO:public ImageIOBase
@@ -100,32 +116,18 @@ public:
   /** Reads the data from disk into the memory buffer provided. */
   virtual void Read(void *buffer) ITK_OVERRIDE;
 
-  /** Set/Get the original component type of the image. This differs from
-   * ComponentType which may change as a function of rescale slope and
-   * intercept. */
-  itkGetEnumMacro(InternalComponentType, IOComponentType);
-  itkSetEnumMacro(InternalComponentType, IOComponentType);
-
   /*-------- This part of the interfaces deals with writing data. ----- */
 
-  /** Determine the file type. Returns true if this ImageIO can write the
-   * file specified. GDCM triggers on ".dcm" and ".dicom". */
+  //Writing not supported
   virtual bool CanWriteFile(const char *) ITK_OVERRIDE;
 
-  /** Writes the spacing and dimensions of the image.
-   * Assumes SetFileName has been called with a valid file name. */
+  //Writing not supported
   virtual void WriteImageInformation() ITK_OVERRIDE;
 
-  /** Writes the data to disk from the memory buffer provided. Make sure
-   * that the IORegion has been set properly. */
+  //Writing not supported
   virtual void Write(const void *buffer) ITK_OVERRIDE;
 
   void GetPatientName(char *name);
-
-  /** Set/Get a compression type to use. */
-  typedef enum { JPEG = 0, JPEG2000, JPEGLS, RLE } TCompressionType;
-  itkSetEnumMacro(CompressionType, TCompressionType);
-  itkGetEnumMacro(CompressionType, TCompressionType);
 
   typedef std::vector<std::pair<double, double>> TTableAngleType;
   std::vector<std::pair<double, double>> m_TableAngles1;
@@ -144,8 +146,6 @@ protected:
   ~KretzImageIO() ITK_OVERRIDE;
   virtual void PrintSelf(std::ostream & os, Indent indent) const ITK_OVERRIDE;
 
-  double m_Offset1;
-  double m_Offset2;
   double m_Resolution;
   double m_rBstart;
   double m_rD;
@@ -157,12 +157,6 @@ private:
 
   std::string m_PatientName;
 
-  /** defines whether this image is a 2D out of a 2D image
-   *  or a 2D out of a 3D image. */
-  unsigned int     m_GlobalNumberOfDimensions;
-  TCompressionType m_CompressionType;
-
-  ImageIOBase::IOComponentType m_InternalComponentType;
 };
 } // end namespace itk
 
