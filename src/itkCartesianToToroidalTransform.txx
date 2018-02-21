@@ -51,13 +51,13 @@ double CartesianToToroidalTransform<TScalarType, NDimensions>::Interpolate(doubl
 }
 
 template<class TScalarType, unsigned int NDimensions>
-void CartesianToToroidalTransform<TScalarType, NDimensions>::SetTable1(const TableType table){
-    m_TableAngles1 = table;
+void CartesianToToroidalTransform<TScalarType, NDimensions>::SetTableTheta(const TableType table){
+    m_TableAnglesTheta = table;
 }
 
 template<class TScalarType, unsigned int NDimensions>
-void CartesianToToroidalTransform<TScalarType, NDimensions>::SetTable2(const TableType table){
-    m_TableAngles2 = table;
+void CartesianToToroidalTransform<TScalarType, NDimensions>::SetTablePhi(const TableType table){
+    m_TableAnglesPhi = table;
 }
 
 // Transform a point
@@ -91,10 +91,10 @@ TransformPoint(const InputPointType &point) const
     pRB -= m_SweepRadius;
 
 
-    if(m_TableAngles1.size() > 0 && m_TableAngles2.size() > 0){
+    if(m_TableAnglesTheta.size() > 0 && m_TableAnglesPhi.size() > 0){
         opoint[0] = pRB/m_Resolution;
-        opoint[1] = Interpolate(theta,m_TableAngles1);
-        opoint[2] = Interpolate(phi,m_TableAngles2);
+        opoint[1] = Interpolate(theta,m_TableAnglesTheta);
+        opoint[2] = Interpolate(phi,m_TableAnglesPhi);
     } else {
         opoint[0] = pRB;
         opoint[1] = theta;

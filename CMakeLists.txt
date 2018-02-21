@@ -22,13 +22,9 @@ set(Libraries ${ITK_LIBRARIES})
 #add_subdirectory(include)
 
 SET(SOURCE
-    src/KretzFileWriter.cxx
+    src/itkKretzWriter.cxx
     src/itkKretzImageIO.cxx
     )
-
-SET(HEADERS
-   include/itkKretzImageIO.h
-   )
 
 add_executable(KretzFileWriter ${SOURCE} )
 target_link_libraries(KretzFileWriter ${} ${ITK_LIBRARIES} ${Boost_LIBRARIES})

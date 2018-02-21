@@ -33,13 +33,13 @@ PrintSelf(std::ostream &os, Indent indent) const
 }
 
 template<class TScalarType, unsigned int NDimensions>
-void ToroidalToCartesianTransform<TScalarType, NDimensions>::SetTable1(const TableType table){
-    m_TableAngles1 = table;
+void ToroidalToCartesianTransform<TScalarType, NDimensions>::SetTableTheta(const TableType table){
+    m_TableAnglesTheta = table;
 }
 
 template<class TScalarType, unsigned int NDimensions>
-void ToroidalToCartesianTransform<TScalarType, NDimensions>::SetTable2(const TableType table){
-    m_TableAngles2 = table;
+void ToroidalToCartesianTransform<TScalarType, NDimensions>::SetTablePhi(const TableType table){
+    m_TableAnglesPhi = table;
 }
 
 template<class TScalarType, unsigned int NDimensions>
@@ -76,8 +76,8 @@ TransformPoint(const InputPointType &point) const
 
     double theta, phi, rB;
 
-    phi = m_TableAngles2[point[2]].first;
-    theta = m_TableAngles1[point[1]].first;
+    phi = m_TableAnglesPhi[point[2]].first;
+    theta = m_TableAnglesTheta[point[1]].first;
     rB = m_Resolution*point[0] + m_SweepRadius;
 
     double sinPhi = std::sin(phi);

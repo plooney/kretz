@@ -183,7 +183,7 @@ void KretzImageIO::ReadImageInformation()
         inputFileStream.read(reinterpret_cast<char *>(&value), taglength); 
 	offset2 = value;
     } 
-    else if(tag==Angles1Tag){
+    else if(tag==AnglesPhiTag){
         int len = taglength/sizeof(double);
 	double * angles = new double[len];
         inputFileStream.read(reinterpret_cast<char *>(angles), sizeof( double ) * len); 
@@ -192,11 +192,11 @@ void KretzImageIO::ReadImageInformation()
 	double bCentre = (amin+amax)/2;
 	for(int i=0; i<len;i++){
             double angle = angles[i]-bCentre;
-	    this->m_TableAngles2.push_back(std::make_pair(angle, i));
+	    this->m_TableAnglesPhi.push_back(std::make_pair(angle, i));
 	}
 	delete angles;
     } 
-    else if(tag==Angles2Tag){
+    else if(tag==AnglesThetaTag){
         int len = taglength/sizeof(double);
 	double * angles = new double[len];
         inputFileStream.read(reinterpret_cast<char *>(angles), sizeof( double ) * len); 
@@ -205,7 +205,7 @@ void KretzImageIO::ReadImageInformation()
 	double bCentre = (amin+amax)/2;
 	for(int i=0; i<len;i++){
             double angle = angles[i]-bCentre;
-	    this->m_TableAngles1.push_back(std::make_pair(angle, i));
+	    this->m_TableAnglesTheta.push_back(std::make_pair(angle, i));
 	}
 	delete angles;
     } 

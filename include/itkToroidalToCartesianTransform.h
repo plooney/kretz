@@ -57,8 +57,8 @@ public:
     double m_SweepRadius;
     double m_Resolution;
 
-    TableType m_TableAngles1;
-    TableType m_TableAngles2;
+    TableType m_TableAnglesTheta;
+    TableType m_TableAnglesPhi;
 
     /** New macro for creation of through the object factory.*/
     itkNewMacro( Self )
@@ -143,7 +143,6 @@ public:
     virtual void ComputeJacobianWithRespectToPosition( const InputPointType &, JacobianType &)  const
     {
         itkExceptionMacro(<< "Method not applicable for polar transform. ");
-        //return this->m_Jacobian;
     }
 
     /** Compute the Jacobian Matrix of the transformation at one point - not
@@ -151,11 +150,10 @@ public:
     virtual void ComputeJacobianWithRespectToParameters( const InputPointType &, JacobianType &)  const
     {
         itkExceptionMacro(<< "Method not applicable for polar transform. ");
-        //return this->m_Jacobian;
     }
 
-    virtual void SetTable1(const TableType);
-    virtual void SetTable2(const TableType);
+    virtual void SetTableTheta(const TableType);
+    virtual void SetTablePhi(const TableType);
 
     virtual void SetParameters(const ParametersType &){
 

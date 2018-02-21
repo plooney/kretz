@@ -138,14 +138,14 @@ int main(int ,char *[] )
     c2t->SetBModeRadius(rD);
     c2t->SetSweepRadius(rBstart);
     c2t->SetResolution(rResol);
-    c2t->SetTable1(TableAngles1);
-    c2t->SetTable2(TableAngles2);
+    c2t->SetTableTheta(TableAngles1);
+    c2t->SetTablePhi(TableAngles2);
 
     t2c->SetBModeRadius(rD);
     t2c->SetSweepRadius(rBstart);
     t2c->SetResolution(rResol);
-    t2c->SetTable1(TableAngles1);
-    t2c->SetTable2(TableAngles2);
+    t2c->SetTableTheta(TableAngles1);
+    t2c->SetTablePhi(TableAngles2);
 
     ImageType::PointType p1;
     p1[0] = -10;

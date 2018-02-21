@@ -57,8 +57,8 @@ public:
     double m_SweepRadius;
     double m_Resolution;
 
-    std::vector<std::pair<double, double> > m_TableAngles1;
-    std::vector<std::pair<double, double> > m_TableAngles2;
+    std::vector<std::pair<double, double> > m_TableAnglesTheta;
+    std::vector<std::pair<double, double> > m_TableAnglesPhi;
 
     /** New macro for creation of through the object factory.*/
     itkNewMacro( Self )
@@ -154,8 +154,8 @@ public:
         //return this->m_Jacobian;
     }
 
-    virtual void SetTable1(const TableType);
-    virtual void SetTable2(const TableType);
+    virtual void SetTableTheta(const TableType);
+    virtual void SetTablePhi(const TableType);
 
     virtual void SetParameters(const ParametersType &){
 

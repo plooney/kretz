@@ -108,8 +108,8 @@ void execute(std::string filename, std::string filename_out, std::vector<int> si
   t2c->SetBModeRadius(kretzImageIO->GetrD());
   t2c->SetSweepRadius(kretzImageIO->GetrBstart());
   t2c->SetResolution(kretzImageIO->GetResolution());
-  t2c->SetTable1(kretzImageIO->m_TableAngles1);
-  t2c->SetTable2(kretzImageIO->m_TableAngles2);
+  t2c->SetTableTheta(kretzImageIO->m_TableAnglesTheta);
+  t2c->SetTablePhi(kretzImageIO->m_TableAnglesPhi);
 
   BoundingBoxType::BoundsArrayType bounds = computeBounds(toroidalImage, t2c);
 
@@ -129,16 +129,6 @@ void execute(std::string filename, std::string filename_out, std::vector<int> si
   std::cout << "resol " << resol_vec.at(0) << " " << resol_vec.at(1) << " " << resol_vec.at(2) << std::endl;
   std::cout << "size " << size_vec[0] << " " << size_vec[1] << " " << size_vec[2]  << std::endl;
 
-  //ultrasounddata->SetDisplayResolution(resol_vec[0],resol_vec[1],resol_vec[2]);
-  //ultrasounddata->SetDisplaySize(size_vec[0],size_vec[1],size_vec[2]);
-  //SetDisplaySize((int)(( (bounds[1]-bounds[0])/display_resolution[0])+1.5),(int)(((bounds[3]-bounds[2])/display_resolution[1])+1.5),(int)(((bounds[5]-bounds[4])/display_resolution[2])+1.5));
-
-  //ultrasounddata->SetDisplayResolutionAutomatically();
-  //ultrasounddata->VtkFillDisplayArrays();
-  //ultrasounddata->SetDisplayResolutionAutomatically();
-  //ImageType::Pointer output = ultrasounddata->TryPointSet();
-
-  //ImageType::Pointer toroidalImage = ultrasounddata->CreateToroidalImage(bounds);
   if(flagMask) toroidalImage = createMaskImage(toroidalImage);
 
 
@@ -178,8 +168,8 @@ void execute(std::string filename, std::string filename_out, std::vector<int> si
 	  c2t->SetBModeRadius(kretzImageIO->GetrD());
 	  c2t->SetSweepRadius(kretzImageIO->GetrBstart());
 	  c2t->SetResolution(kretzImageIO->GetResolution());
-	  c2t->SetTable1(kretzImageIO->m_TableAngles1);
-	  c2t->SetTable2(kretzImageIO->m_TableAngles2);
+	  c2t->SetTableTheta(kretzImageIO->m_TableAnglesTheta);
+	  c2t->SetTablePhi(kretzImageIO->m_TableAnglesPhi);
 	  typedef itk::ResampleImageFilter<ImageType,DoubleImageType> ResampleFilterType;
 
 	  typedef DoubleImageType::SpacingType SpacingType;
@@ -214,8 +204,8 @@ void execute(std::string filename, std::string filename_out, std::vector<int> si
 	  c2t->SetBModeRadius(kretzImageIO->GetrD());
 	  c2t->SetSweepRadius(kretzImageIO->GetrBstart());
 	  c2t->SetResolution(kretzImageIO->GetResolution());
-	  c2t->SetTable1(kretzImageIO->m_TableAngles1);
-	  c2t->SetTable2(kretzImageIO->m_TableAngles2);
+	  c2t->SetTableTheta(kretzImageIO->m_TableAnglesTheta);
+	  c2t->SetTablePhi(kretzImageIO->m_TableAnglesPhi);
 	  typedef itk::ResampleImageFilter<ImageType,ImageType> ResampleFilterType;
 
 	  typedef ImageType::SpacingType SpacingType;

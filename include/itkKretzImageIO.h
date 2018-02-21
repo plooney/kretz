@@ -70,8 +70,8 @@ static Tag DimensionZTag(0xc000, 0x0003);
 static Tag ResolutionTag(0xc100, 0x0001);
 static Tag Offset1Tag(0xc200, 0x0001);
 static Tag Offset2Tag(0xc200, 0x0002);
-static Tag Angles1Tag(0xc300, 0x0001);
-static Tag Angles2Tag(0xc300, 0x0002);
+static Tag AnglesPhiTag(0xc300, 0x0001);
+static Tag AnglesThetaTag(0xc300, 0x0002);
 static Tag ImageTag(0xd000, 0x0001);
 static Tag CineFramesTag(0xd400, 0x0001);
 static Tag SizeFramesTag(0xd400, 0x0002);
@@ -130,8 +130,8 @@ public:
   void GetPatientName(char *name);
 
   typedef std::vector<std::pair<double, double>> TTableAngleType;
-  std::vector<std::pair<double, double>> m_TableAngles1;
-  std::vector<std::pair<double, double>> m_TableAngles2;
+  std::vector<std::pair<double, double>> m_TableAnglesTheta;
+  std::vector<std::pair<double, double>> m_TableAnglesPhi;
 
   itkSetMacro(rBstart, double);
   itkGetMacro(rBstart, double);
