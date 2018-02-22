@@ -1,5 +1,3 @@
-
-//#include "stdafx.h"
 #include "stdlib.h"
 #include <sstream>
 #include <iostream>
@@ -49,23 +47,33 @@ typedef itk::PointSet<ImageType::PixelType, Dimension> PointSetType;
 typedef PointSetType::PointsContainerPointer PointsContainerPointer;
 typedef itk::BoundingBox<PointSetType::PointIdentifier, Dimension, double, PointSetType::PointsContainer> BoundingBoxType;
 
-ImageType::Pointer createMaskImage(ImageType::Pointer image){
-    ImageType::Pointer returnImage = ImageType::New();
-    returnImage->SetOrigin(image->GetOrigin());
-    returnImage->SetDirection(image->GetDirection());
-    returnImage->SetSpacing(image->GetSpacing());
-    returnImage->SetRegions(image->GetLargestPossibleRegion());
-    returnImage->Allocate();
-    returnImage->FillBuffer(1);
+/*
+ * Used to find a binary mask of a toroidal volume in cartesian coordinates
+ */
+ImageType::Pointer createMaskImage(ImageType::Pointer image)
+{
+  ImageType::Pointer returnImage = ImageType::New();
+  returnImage->SetOrigin(image->GetOrigin());
+  returnImage->SetDirection(image->GetDirection());
+  returnImage->SetSpacing(image->GetSpacing());
+  returnImage->SetRegions(image->GetLargestPossibleRegion());
+  returnImage->Allocate();
+  returnImage->FillBuffer(1);
 
-    return returnImage;
-
+  return returnImage;
 }
 
-BoundingBoxType::BoundsArrayType computeBounds(ImageType::Pointer image, T2CTransformType::Pointer t2c){
+/*
+ * We need to find the bounds of the toroidal volume in cartesian coordinates 
+ * We cannot assume the transformed toroidal boundary points form the cartesian bounds 
+ * Hence we need to transform each point and find the bounds of the computed mesh
+ */
+BoundingBoxType::BoundsArrayType computeBounds(ImageType::Pointer image, T2CTransformType::Pointer t2c)
+{
   MeshType::Pointer mesh = MeshType::New();
   itk::ImageRegionConstIteratorWithIndex<ImageType> imageIterator(image,image->GetLargestPossibleRegion());
-  while(!imageIterator.IsAtEnd()) {
+  while(!imageIterator.IsAtEnd()) 
+  {
     ImageType::IndexType index = imageIterator.GetIndex();
     ImageType::PointType p;
     p[0] = index[0];
@@ -87,12 +95,11 @@ BoundingBoxType::BoundsArrayType computeBounds(ImageType::Pointer image, T2CTran
   BoundingBoxType::BoundsArrayType bounds = boundingBox->GetBounds();
 
   return bounds;
-
 }
 
 
-void execute(std::string filename, std::string filename_out, std::vector<int> size_vec,std::vector<float> resol_vec, bool flagMask, bool flagNormalise, bool flagThreshold){
-
+int execute(std::string filename, std::string filename_out, std::vector<int> size_vec,std::vector<float> resol_vec, bool flagMask, bool flagNormalise, bool flagThreshold)
+{
   typedef itk::ImageFileReader< ImageType > ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( filename );
@@ -101,7 +108,6 @@ void execute(std::string filename, std::string filename_out, std::vector<int> si
   ImageIOType::Pointer kretzImageIO = ImageIOType::New();
   reader->SetImageIO( kretzImageIO );
   reader->Update();
-  //MeshType::Pointer mesh = ultrasounddata->CreateMesh();
 
   ImageType::Pointer toroidalImage = reader->GetOutput();
   T2CTransformType::Pointer t2c = T2CTransformType::New();
@@ -111,27 +117,34 @@ void execute(std::string filename, std::string filename_out, std::vector<int> si
   t2c->SetTableTheta(kretzImageIO->m_TableAnglesTheta);
   t2c->SetTablePhi(kretzImageIO->m_TableAnglesPhi);
 
+  //Find the bounds of the toroidal volume in cartesian coordinates
   BoundingBoxType::BoundsArrayType bounds = computeBounds(toroidalImage, t2c);
 
   std::cout << "size " << size_vec.size() << std::endl;
   std::cout << "resol " << resol_vec.size() << std::endl;
-  std::cout << bounds[0] << std::endl;
 
-  if(size_vec[0]==0){
+  if(size_vec[0]==0) //if the resolution is provided set the size
+  {
 	  size_vec[0]=(int) ((bounds[1]-bounds[0])/resol_vec[0]);
 	  size_vec[1]=(int) ((bounds[3]-bounds[2])/resol_vec[1]);
 	  size_vec[2]=(int) ((bounds[5]-bounds[4])/resol_vec[2]);
-  } else if(resol_vec[0]==0){
+  } 
+  else if(resol_vec[0]==0) //if the size is provided set the resolution
+  {
 	  resol_vec[0]=(bounds[1]-bounds[0])/(size_vec[0]-1);
 	  resol_vec[1]=(bounds[3]-bounds[2])/(size_vec[1]-1);
 	  resol_vec[2]=(bounds[5]-bounds[4])/(size_vec[2]-1);
+  }
+  else
+  {
+    std::cerr << "Error: both resolution and size provided" <<  std::endl;
+
+    return EXIT_FAILURE;
   }
   std::cout << "resol " << resol_vec.at(0) << " " << resol_vec.at(1) << " " << resol_vec.at(2) << std::endl;
   std::cout << "size " << size_vec[0] << " " << size_vec[1] << " " << size_vec[2]  << std::endl;
 
   if(flagMask) toroidalImage = createMaskImage(toroidalImage);
-
-
 
   if(flagNormalise){
 
@@ -155,15 +168,6 @@ void execute(std::string filename, std::string filename_out, std::vector<int> si
 	  origin[1] = bounds[2];
 	  origin[2] = bounds[4];
 
-
-	  //        typedef itk::RescaleIntensityImageFilter< ImageType, ImageType > RescaleFilterType;
-	  //        RescaleFilterType::Pointer rescaleFilter = RescaleFilterType::New();
-	  //        rescaleFilter->SetInput(toroidalImage);
-	  //        rescaleFilter->SetOutputMinimum(0);
-	  //        rescaleFilter->SetOutputMaximum(255);
-	  //        rescaleFilter->Update();
-	  //        ImageType::Pointer outputImage = rescaleFilter->GetOutput();
-
 	  C2TTransformType::Pointer c2t = C2TTransformType::New();
 	  c2t->SetBModeRadius(kretzImageIO->GetrD());
 	  c2t->SetSweepRadius(kretzImageIO->GetrBstart());
@@ -178,13 +182,12 @@ void execute(std::string filename, std::string filename_out, std::vector<int> si
 	  spacing[1] = resol_vec.at(1);
 	  spacing[2] = resol_vec.at(2);
 	  typename ResampleFilterType::Pointer resampleFilter = ResampleFilterType::New();
-          resampleFilter->SetInput(toroidalImage);
+    resampleFilter->SetInput(toroidalImage);
 	  resampleFilter->SetTransform(c2t);
 	  resampleFilter->SetOutputOrigin(origin);
 	  resampleFilter->SetOutputSpacing(spacing);
 	  resampleFilter->Update();
 	  DoubleImageType::Pointer output = resampleFilter->GetOutput(); 
-
 
 	  ImageWriterType::Pointer ITKImageWriter = ImageWriterType::New();
 
@@ -192,8 +195,9 @@ void execute(std::string filename, std::string filename_out, std::vector<int> si
 	  ITKImageWriter->SetInput(output);
 	  ITKImageWriter->Write();
 
-  } else {
-
+  } 
+  else 
+  {
 	  ImageType::PointType origin;
 	  origin[0] = bounds[0];
 	  origin[1] = bounds[2];
@@ -222,7 +226,7 @@ void execute(std::string filename, std::string filename_out, std::vector<int> si
 
 
 	  typename ResampleFilterType::Pointer resampleFilter = ResampleFilterType::New();
-          resampleFilter->SetInput(toroidalImage);
+    resampleFilter->SetInput(toroidalImage);
 
 	  resampleFilter->SetTransform(c2t);
 	  resampleFilter->SetSize(size);
@@ -238,21 +242,18 @@ void execute(std::string filename, std::string filename_out, std::vector<int> si
 	  ITKImageWriter->SetInput(output);
 	  ITKImageWriter->Write();
   }
-
+  return EXIT_SUCCESS;
 
 }
 
 int main(int argc, char ** argv)
 {
 
-
     std::string filename, filename_out;
     std::vector<int> size_vec(3);
     std::vector<float> resol_vec(3);
 
-
     po::options_description desc("Allowed options");
-
 
     bool flagMask = false;
     bool flagNormalise = false;
@@ -272,23 +273,17 @@ int main(int argc, char ** argv)
     try
     {
 
-
         po::variables_map vm;
         po::store(po::parse_command_line(argc, argv, desc), vm);
 
         if (vm.count("help") || vm.empty() || (vm.count("size")==0 && vm.count("resol")==0)) {
             cout << desc << "\n";
-            return 1;
+            return EXIT_FAILURE;
         }
 
-        // There must be an easy way to handle the relationship between the
-        // option "help" and "host"-"port"-"config"
-        // Yes, the magic is putting the po::notify after "help" option check
         po::notify(vm);
 
-        execute(filename,filename_out,size_vec,resol_vec,flagMask,flagNormalise,flagThreshold);
-
-        return 0;
+        return execute(filename,filename_out,size_vec,resol_vec,flagMask,flagNormalise,flagThreshold);
 
     }
     catch(std::exception& e)
@@ -298,12 +293,12 @@ int main(int argc, char ** argv)
 
         cout << desc << "\n";
 
-        return false;
+        return EXIT_FAILURE;
     }
     catch(...)
     {
         std::cerr << "Unknown error!" << "\n";
-        return false;
+        return EXIT_FAILURE;
     }
 
 }

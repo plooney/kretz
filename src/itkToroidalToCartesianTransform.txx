@@ -25,8 +25,7 @@ ToroidalToCartesianTransform<TScalarType, NDimensions>::
 
 // Print self
 template<class TScalarType, unsigned int NDimensions>
-void
-ToroidalToCartesianTransform<TScalarType, NDimensions>::
+void ToroidalToCartesianTransform<TScalarType, NDimensions>::
 PrintSelf(std::ostream &os, Indent indent) const
 {
     Superclass::PrintSelf(os,indent);
@@ -44,18 +43,18 @@ void ToroidalToCartesianTransform<TScalarType, NDimensions>::SetTablePhi(const T
 
 template<class TScalarType, unsigned int NDimensions>
 double ToroidalToCartesianTransform<TScalarType, NDimensions>::Interpolate(double x, std::vector<std::pair<double,double>> table) const {
-    // Assumes that "table" is sorted by .first
-    // Check if x is out of bound
-    if (x > table.back().first) return std::numeric_limits<double>::max();
-    if (x < table[0].first) return -std::numeric_limits<double>::max();
-    std::vector<std::pair<double, double> >::iterator it, it2;
-    // INFINITY is defined in math.h in the glibc implementation
-    it = std::lower_bound(table.begin(), table.end(), std::make_pair(x, -std::numeric_limits<double>::max()));
-    // Corner case
-    if (it == table.begin()) return it->second;
-    it2 = it;
-    --it2;
-    return it2->second + (it->second - it2->second)*(x - it2->first)/(it->first - it2->first);
+  // Assumes that "table" is sorted by .first
+  // Check if x is out of bound
+  if (x > table.back().first) return std::numeric_limits<double>::max();
+  if (x < table[0].first) return -std::numeric_limits<double>::max();
+  std::vector<std::pair<double, double> >::iterator it, it2;
+  // INFINITY is defined in math.h in the glibc implementation
+  it = std::lower_bound(table.begin(), table.end(), std::make_pair(x, -std::numeric_limits<double>::max()));
+  // Corner case
+  if (it == table.begin()) return it->second;
+  it2 = it;
+  --it2;
+  return it2->second + (it->second - it2->second)*(x - it2->first)/(it->first - it2->first);
 }
 
 
@@ -65,36 +64,35 @@ typename ToroidalToCartesianTransform<TScalarType, NDimensions>::OutputPointType
 ToroidalToCartesianTransform<TScalarType, NDimensions>::
 TransformPoint(const InputPointType &point) const 
 {
+  if (NDimensions != 3) {
+      itkExceptionMacro(<< "Method not applicable for dimension not equal to 3.");
+      return OutputPointType();
+  }
 
-    if (NDimensions != 3) {
-        itkExceptionMacro(<< "Method not applicable for dimension not equal to 3.");
-        return OutputPointType();
-    }
+  OutputPointType opoint;
+  double x,y,z;
 
-    OutputPointType opoint;
-    double x,y,z;
+  double theta, phi, rB;
 
-    double theta, phi, rB;
+  phi = m_TableAnglesPhi[point[2]].first;
+  theta = m_TableAnglesTheta[point[1]].first;
+  rB = m_Resolution*point[0] + m_SweepRadius;
 
-    phi = m_TableAnglesPhi[point[2]].first;
-    theta = m_TableAnglesTheta[point[1]].first;
-    rB = m_Resolution*point[0] + m_SweepRadius;
+  double sinPhi = std::sin(phi);
+  double cosPhi = std::cos(phi);
 
-    double sinPhi = std::sin(phi);
-    double cosPhi = std::cos(phi);
+  double sinTheta = std::sin(theta);
+  double cosTheta = std::cos(theta);
 
-    double sinTheta = std::sin(theta);
-    double cosTheta = std::cos(theta);
+  x = rB*sinTheta;
+  y = sinPhi*(rB*cosTheta -m_BModeRadius);
+  z = m_BModeRadius*(1-cosPhi)+rB*cosTheta*cosPhi;
 
-    x = rB*sinTheta;
-    y = -sinPhi*(rB*cosTheta -m_BModeRadius);
-    z = m_BModeRadius*(1-cosPhi)+rB*cosTheta*cosPhi;
+  opoint[0] = x;
+  opoint[1] = y;
+  opoint[2] = z;
 
-    opoint[0] = x;
-    opoint[1] = y;
-    opoint[2] = z;
-
-    return opoint;
+  return opoint;
 }
 
 } // namespace

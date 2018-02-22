@@ -1,20 +1,3 @@
-/*=========================================================================
- *
- *  Copyright Insight Software Consortium
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0.txt
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
- *=========================================================================*/
 #include "itkVersion.h"
 #include "itkKretzImageIO.h"
 #include "itkIOCommon.h"
@@ -50,13 +33,13 @@ bool KretzImageIO::CanReadFile(const char *filename)
 {
   std::ifstream file;
   try
-    {
+  {
     this->OpenFileForReading( file, filename );
-    }
+  }
   catch( ExceptionObject & )
-    {
+  {
     return false;
-    }
+  }
 
   // sniff for the KRETZ signature 
   bool kretzsig(false);
@@ -64,19 +47,19 @@ bool KretzImageIO::CanReadFile(const char *filename)
     file.seekg(0,std::ios_base::beg);
     if(file.fail() || file.eof())
     {
-	    return false;
+      return false;
     }
     char buf[16];
     file.read(buf,16);
     if(file.fail())
     {
-	    return false;
+      return false;
     }
     std::string sig(buf);
     if(sig == "KRETZFILE 1.0   ")
     {
-	    kretzsig = true;
-	    return true;
+      kretzsig = true;
+      return true;
     }
   }
   return false;
@@ -98,17 +81,19 @@ void KretzImageIO::Read(void *buffer)
   // let any exceptions propagate
   unsigned short tag_shorts[2];
   unsigned int taglength;
-  while((inputFileStream.tellg()<endOfTagSearch-8)&&(inputFileStream.tellg()>-1)){
+  while((inputFileStream.tellg()<endOfTagSearch-8)&&(inputFileStream.tellg()>-1))
+  {
     inputFileStream.read(reinterpret_cast<char *>(&tag_shorts), sizeof(tag_shorts)); 
     inputFileStream.read(reinterpret_cast<char *>(&taglength), sizeof(taglength)); 
     bool val_unread = true;
-   
+
     Tag tag(tag_shorts[0],tag_shorts[1]);
-    
-    if(tag==ImageTag){
-	    
-        inputFileStream.read(reinterpret_cast<char *>(buffer), taglength); 
-	std::cout << "Found image data len: " << taglength << tag << std::endl;
+
+    if(tag==ImageTag)
+    {
+
+      inputFileStream.read(reinterpret_cast<char *>(buffer), taglength); 
+      std::cout << "Found image data len: " << taglength << tag << std::endl;
 
     } 
     else {
@@ -137,79 +122,90 @@ void KretzImageIO::ReadImageInformation()
   unsigned short tag_shorts[2];
   unsigned int taglength;
   double offset1, offset2;
-  while((inputFileStream.tellg()<endOfTagSearch-8)&&(inputFileStream.tellg()>-1)){
+  while((inputFileStream.tellg()<endOfTagSearch-8)&&(inputFileStream.tellg()>-1))
+  {
     inputFileStream.read(reinterpret_cast<char *>(&tag_shorts), sizeof(tag_shorts)); 
     inputFileStream.read(reinterpret_cast<char *>(&taglength), sizeof(taglength)); 
-   
+
     Tag tag(tag_shorts[0],tag_shorts[1]);
-    
-    if(tag==PatientTag){
-	char patient_name_c_array[taglength]; 
-        inputFileStream.read(reinterpret_cast<char *>(patient_name_c_array), taglength); 
-	std::cout << std::string(patient_name_c_array) << std::endl;
-	std::string tagString(tag);
-	EncapsulateMetaData< std::string >( dico, tagString, std::string(patient_name_c_array) );
+
+    if(tag==PatientTag)
+    {
+      char patient_name_c_array[taglength]; 
+      inputFileStream.read(reinterpret_cast<char *>(patient_name_c_array), taglength); 
+      std::cout << std::string(patient_name_c_array) << std::endl;
+      std::string tagString(tag);
+      EncapsulateMetaData< std::string >( dico, tagString, std::string(patient_name_c_array) );
     }
-    else if(tag==DimensionXTag){
-        unsigned short dimension;
-        inputFileStream.read(reinterpret_cast<char *>(&dimension), taglength); 
-	std::cout << dimension << std::endl;
-	this->SetDimensions(0,dimension);
+    else if(tag==DimensionXTag)
+    {
+      unsigned short dimension;
+      inputFileStream.read(reinterpret_cast<char *>(&dimension), taglength); 
+      std::cout << dimension << std::endl;
+      this->SetDimensions(0,dimension);
     } 
-    else if(tag==DimensionYTag){
-        unsigned short dimension;
-        inputFileStream.read(reinterpret_cast<char *>(&dimension), taglength); 
-	std::cout << dimension << std::endl;
-	this->SetDimensions(1,dimension);
+    else if(tag==DimensionYTag)
+    {
+      unsigned short dimension;
+      inputFileStream.read(reinterpret_cast<char *>(&dimension), taglength); 
+      std::cout << dimension << std::endl;
+      this->SetDimensions(1,dimension);
     } 
-    else if(tag==DimensionZTag){
-        unsigned short dimension;
-        inputFileStream.read(reinterpret_cast<char *>(&dimension), taglength); 
-	std::cout << dimension << std::endl;
-	this->SetDimensions(2,dimension);
+    else if(tag==DimensionZTag)
+    {
+      unsigned short dimension;
+      inputFileStream.read(reinterpret_cast<char *>(&dimension), taglength); 
+      std::cout << dimension << std::endl;
+      this->SetDimensions(2,dimension);
     } 
-    else if(tag==ResolutionTag){
-        double value;
-        inputFileStream.read(reinterpret_cast<char *>(&value), taglength); 
-	this->m_Resolution = value *1000.0;
+    else if(tag==ResolutionTag)
+    {
+      double value;
+      inputFileStream.read(reinterpret_cast<char *>(&value), taglength); 
+      this->m_Resolution = value *1000.0;
     } 
-    else if(tag==Offset1Tag){
-        double value;
-        inputFileStream.read(reinterpret_cast<char *>(&value), taglength); 
-	offset1 = value;
+    else if(tag==Offset1Tag)
+    {
+      double value;
+      inputFileStream.read(reinterpret_cast<char *>(&value), taglength); 
+      offset1 = value;
     } 
-    else if(tag==Offset2Tag){
-        double value;
-        inputFileStream.read(reinterpret_cast<char *>(&value), taglength); 
-	offset2 = value;
+    else if(tag==Offset2Tag)
+    {
+      double value;
+      inputFileStream.read(reinterpret_cast<char *>(&value), taglength); 
+      offset2 = value;
     } 
-    else if(tag==AnglesPhiTag){
-        int len = taglength/sizeof(double);
-	double * angles = new double[len];
-        inputFileStream.read(reinterpret_cast<char *>(angles), sizeof( double ) * len); 
-        double amin = angles[0];
-        double amax = angles[len-1];
-	double bCentre = (amin+amax)/2;
-	for(int i=0; i<len;i++){
-            double angle = angles[i]-bCentre;
-	    this->m_TableAnglesPhi.push_back(std::make_pair(angle, i));
-	}
-	delete angles;
+    else if(tag==AnglesPhiTag)
+    {
+      int len = taglength/sizeof(double);
+      double * angles = new double[len];
+      inputFileStream.read(reinterpret_cast<char *>(angles), sizeof( double ) * len); 
+      double amin = angles[0];
+      double amax = angles[len-1];
+      double bCentre = (amin+amax)/2;
+      for(int i=0; i<len;i++){
+        double angle = angles[i]-bCentre;
+        this->m_TableAnglesPhi.push_back(std::make_pair(angle, i));
+      }
+      delete[] angles;
     } 
-    else if(tag==AnglesThetaTag){
-        int len = taglength/sizeof(double);
-	double * angles = new double[len];
-        inputFileStream.read(reinterpret_cast<char *>(angles), sizeof( double ) * len); 
-        double amin = angles[0];
-        double amax = angles[len-1];
-	double bCentre = (amin+amax)/2;
-	for(int i=0; i<len;i++){
-            double angle = angles[i]-bCentre;
-	    this->m_TableAnglesTheta.push_back(std::make_pair(angle, i));
-	}
-	delete angles;
+    else if(tag==AnglesThetaTag)
+    {
+      int len = taglength/sizeof(double);
+      double * angles = new double[len];
+      inputFileStream.read(reinterpret_cast<char *>(angles), sizeof( double ) * len); 
+      double amin = angles[0];
+      double amax = angles[len-1];
+      double bCentre = (amin+amax)/2;
+      for(int i=0; i<len;i++){
+        double angle = angles[i]-bCentre;
+        this->m_TableAnglesTheta.push_back(std::make_pair(angle, i));
+      }
+      delete[] angles;
     } 
-    else {
+    else 
+    {
       inputFileStream.seekg(taglength,std::ios::cur);
     }
 
@@ -231,26 +227,18 @@ void KretzImageIO::WriteImageInformation()
 
 void KretzImageIO::Write(const void *buffer)
 {
-    {
+  {
     itkExceptionMacro(<< "Kretz file writing is not supported.");
-    }
+  }
 }
 
 void KretzImageIO::PrintSelf(std::ostream & os, Indent indent) const
 {
-/*
   Superclass::PrintSelf(os, indent);
-  os << indent << "Internal Component Type: " << this->GetComponentTypeAsString(m_InternalComponentType)
-     << std::endl;
-  os << indent << "RescaleSlope: " << m_RescaleSlope << std::endl;
-  os << indent << "RescaleIntercept: " << m_RescaleIntercept << std::endl;
-  os << indent << "KeepOriginalUID:" << ( m_KeepOriginalUID ? "On" : "Off" ) << std::endl;
-  os << indent << "LoadPrivateTags:" << ( m_LoadPrivateTags ? "On" : "Off" ) << std::endl;
-  os << indent << "UIDPrefix: " << m_UIDPrefix << std::endl;
-  os << indent << "StudyInstanceUID: " << m_StudyInstanceUID << std::endl;
-  os << indent << "SeriesInstanceUID: " << m_SeriesInstanceUID << std::endl;
-  os << indent << "FrameOfReferenceInstanceUID: " << m_FrameOfReferenceInstanceUID << std::endl;
-  os << indent << "CompressionType:" << m_CompressionType << std::endl;
-*/
+  std::string value;
+  const MetaDataDictionary & dico = this->GetMetaDataDictionary();
+  ExposeMetaData< std::string >(dico, PatientTag, value);
+  os << indent << "PatientName: " << value << std::endl;
+
 }
 } // end namespace itk

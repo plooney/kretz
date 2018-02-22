@@ -1,27 +1,29 @@
 cmake_minimum_required(VERSION 2.8)
-INCLUDE(${CMAKE_SOURCE_DIR}/IJMacros.txt)
+include(${CMAKE_SOURCE_DIR}/IJMacros.txt)
+include(ExternalProject)
 
-PROJECT(ToroidalTransform)
+project(ToroidalTransform)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
+set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 
-ENABLE_TESTING()
-INCLUDE(Dart)
+enable_testing()
+include(Dart)
 
-FIND_PACKAGE( Boost 1.58 COMPONENTS program_options REQUIRED )
-INCLUDE_DIRECTORIES(src include ${Boost_INCLUDE_DIR} )
+find_package( Boost 1.58 COMPONENTS program_options REQUIRED )
+include_directories(src include ${Boost_INCLUDE_DIR} )
 
 SET(Required_Packages
     ITK
     )
-FOREACH(Package ${Required_Packages})
-LOADPACKAGE(${Package})
-ENDFOREACH(Package)
+foreach(Package ${Required_Packages})
+loadpackage(${Package})
+endforeach(Package)
 
 set(Libraries ${ITK_LIBRARIES})
 #add_subdirectory(src)
 #add_subdirectory(include)
 
-SET(SOURCE
+set(SOURCE
     src/itkKretzWriter.cxx
     src/itkKretzImageIO.cxx
     )
@@ -38,12 +40,28 @@ add_executable(KretzConverter
 
 target_link_libraries(KretzConverter ${Libraries} ${Boost_LIBRARIES})
 
+if(BUILD_TESTING)
 add_executable(ToroidalTransformTest
     src/itkToroidalToCartesianTransform.txx
     src/itkCartesianToToroidalTransform.txx
-    src/itkToroidalTransformTest.cxx
+    test/itkToroidalTransformTest.cxx
     )
 
 target_link_libraries(ToroidalTransformTest ${Libraries})
 
-ADD_TEST(ToroidalTransformTest ToroidalTransformTest ToroidalTransformTest)
+# Test writing the toroidal volume out to a nii.gz file format, geometry of the file is determined by angles in  
+add_test(KretzFileTest KretzFileWriter -i test/test.vol -o test/test_toroidal.nii.gz) 
+
+# Test conversion of toroidal Kretz fie to cartesian coordinates
+add_test(KretzConverterTest KretzConverter -i test/test.vol -o test/test_cartesian.nii.gz -r 0.6 0.6 0.6) 
+
+# Test conversion of cartesian file to toroidal nii.gz with geometry specified in the Kretz file
+add_test(KretzFileTestCartesian KretzFileWriter -i test/test.vol -o test/test_toroidal2.nii.gz -c test/test_cartesian.nii.gz) 
+
+# Test conversion of created toroidal volume to cartesian and back again
+add_test(ToroidalTransformTest ToroidalTransformTest)
+
+file(DOWNLOAD https://drive.google.com/uc?export=download&id=1TYurqAZ0Ya9f7aZY5_DcfsscSMlKIYUN test/test.vol 
+    EXPECTED_MD5 32631727d0202dc825f12418806f2f13 
+    )
+endif()
