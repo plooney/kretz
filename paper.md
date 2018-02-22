@@ -1,11 +1,11 @@
 ---
-title: 'Fidgit: An ungodly union of GitHub and figshare'
+title: 'A library to for 3D ultrasound file reading'
 tags:
 - example
 - tags
 - for the paper
 authors:
-- name: Arfon M Smith
+- name: Pádraig T Looney
   orcid: 0000-0000-0000-1234
   affiliation: "1, 2" # (Multiple affiliations must be quoted)
 - name: Mickey Mouse
