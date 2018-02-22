@@ -19,22 +19,26 @@ namespace itk
 
 /** \brief Toroidal transformation of a vector space (e.g. space coordinates).
  *
- * Transforms first two coordinates form polar space <alpha,radius> to cartesian
- * coordinates. Other dimensions are left unchanges. In fact this is generalized
- * cylindric transform:
- * \f[			x_1 = r cos( \alpha ) \f]
- * \f[			x_2 = r sin( \alpha ) \f]
- * \f[			x_n = x_n, \mbox{ n>=2 } \f]
+ * Transforms three coordinates form toroidal space <alpha,radius> to cartesian
+ * coordinates. These are used in trnasfomring the output of 3D ultrasound volumes 
+ *
+ * \f[			x = r \times sin( \theta ) \f]
+ * \f[			y = -sin( \phi ) \times  (r cos( \theta ) -d) \f]
+ * \f[			z = d \times (1-cos( \phi ) ) + r \times cos( \theta ) \times cos( \phi ) \f]
  *
  *
- * \par
- * Center of the polar transform is a center of coordinate system < 0, 0 >.
+ * where;
  *
- * Dimension must be at least 2 or an exception is thrown during transform.
+ * \f$ \theta \f$ is the angle in BMode,
+ * \f$ \phi \f$ is the angle the BMode is swept through,
+ * \f$ r \f$ is the distance from the BMode focus
+ * \f$ d \f$ is the distance between foci.
+ *
+ * Dimension must be 3 or an exception is thrown during transform.
  *
  * Extent of input in first dimension (alpha) should be only < 0, 2*pi ).
  *
- * \author Pádraig Looney, Nuffield Department of Obstetrics and Gynaecology, University of Oxford.
+ * \author Pádraig Looney, University of Oxford.
  *
  * \ingroup Transforms
  */
@@ -108,9 +112,9 @@ public:
     typedef typename Superclass::ParametersType ParametersType;
 
     /** Method to transform a point.
-   * This method transforms first two dimensions of a point from polar
-   * coordinates <alpha,radius> to cartesian coordinates.
-   */
+     * This method transforms first two dimensions of a point from polar
+     * coordinates <alpha,radius> to cartesian coordinates.
+     */
     OutputPointType     TransformPoint(const InputPointType  &point ) const;
 
     /** Method to transform a vector - not applicable for this type of
@@ -178,9 +182,7 @@ private:
 
 }; //class CartesianToToroidalTransform
 
-
 }  // namespace itk
-
 
 #ifndef ITK_MANUAL_INSTANTIATION
 #include "itkCartesianToToroidalTransform.txx"

@@ -19,22 +19,28 @@ namespace itk
 
 /** \brief Toroidal transformation of a vector space (e.g. space coordinates).
  *
- * Transforms first two coordinates form polar space <alpha,radius> to cartesian
- * coordinates. Other dimensions are left unchanges. In fact this is generalized
- * cylindric transform:
- * \f[			x_1 = r cos( \alpha ) \f]
- * \f[			x_2 = r sin( \alpha ) \f]
- * \f[			x_n = x_n, \mbox{ n>=2 } \f]
+ * Transforms three coordinates form toroidal space <alpha,radius> to cartesian
+ * coordinates. These are used in trnasfomring the output of 3D ultrasound volumes 
+ *
+ * \f[			r = \sqrt{ x^2 + (d - \frac{y}{sin( \phi )} ) } \f]
+ * \f[			\phi = -tan^{-1}( \frac{y}{z-d} ) \f]
+ * \f[			\theta = sin^{-1}( \frac{x}{b} ) \f]
  *
  *
- * \par
+ * where;
+ *
+ * \f$ \theta \f$ is the angle in BMode,
+ * \f$ \phi \f$ is the angle the BMode is swept through,
+ * \f$ r \f$ is the distance from the BMode focus
+ * \f$ d \f$ is the distance between foci.
+ *
  * Center of the polar transform is a center of coordinate system < 0, 0 >.
  *
- * Dimension must be at least 2 or an exception is thrown during transform.
+ * Dimension must be 3 or an exception is thrown during transform.
  *
  * Extent of input in first dimension (alpha) should be only < 0, 2*pi ).
  *
- * \author Pádraig Looney, Nuffield Department of Obstetrics and Gynaecology, University of Oxford.
+ * \author Pádraig Looney, University of Oxford.
  *
  * \ingroup Transforms
  */

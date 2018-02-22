@@ -26,6 +26,9 @@ namespace itk
 {
 
 
+/**
+ *Class to abstract a group and element for reading a Kretz file.
+ */
 class Tag
 {
 public:
@@ -81,8 +84,8 @@ static Tag Image4dTag(0xd600, 0x0001);
 /** \class KretzImageIO
  *
  *  \brief ImageIO class for reading Kretzfile V1.0 
- *  The pixel spacing in the toroidal space is not fixed. The variable angel spacing and radial resolution are stored in class variables 
- *  Writing is not supported
+ *  The pixel spacing in the toroidal space is not fixed. The variable angel spacing and radial resolution are stored in class variables. Hence, the spacing and origin do not correspond to real world values. 
+ *  Writing is not supported. 
  *
  *  \ingroup IOFilters
  *

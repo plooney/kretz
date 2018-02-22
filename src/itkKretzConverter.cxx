@@ -144,9 +144,11 @@ int execute(std::string filename, std::string filename_out, std::vector<int> siz
   std::cout << "resol " << resol_vec.at(0) << " " << resol_vec.at(1) << " " << resol_vec.at(2) << std::endl;
   std::cout << "size " << size_vec[0] << " " << size_vec[1] << " " << size_vec[2]  << std::endl;
 
+  //if a mask is required create a binary image with ones everywhere 
+  //and same dimensions as input file
   if(flagMask) toroidalImage = createMaskImage(toroidalImage);
 
-  if(flagNormalise){
+  if(flagNormalise){ //if normalised images wanted outpu double image type
 
 	  typedef itk::ImageFileWriter<DoubleImageType> ImageWriterType;
 	  typedef itk::CastImageFilter<ImageType,DoubleImageType> CastImageFilterType;
@@ -196,7 +198,7 @@ int execute(std::string filename, std::string filename_out, std::vector<int> siz
 	  ITKImageWriter->Write();
 
   } 
-  else 
+  else //If non normalised images required can revert to original image type
   {
 	  ImageType::PointType origin;
 	  origin[0] = bounds[0];
