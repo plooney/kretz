@@ -1,20 +1,22 @@
 ---
-title: 'A library to for 3D ultrasound file reading'
+title: '3D ultrasound file reading and coordinate transformations'
 tags:
-- example
-- tags
-- for the paper
+- ITK
+- 3D Ultrasound
 authors:
-- name: PÃ¡draig T Looney
-  orcid: 0000-0000-0000-1234
-  affiliation: "1, 2" # (Multiple affiliations must be quoted)
-- name: Mickey Mouse
-  orcid: 0000-0000-0000-1234
+- name: Pádraig T. Looney
+  orcid: 0000-0002-0764-5413
+  affiliation: 1 
+- name: Gordon N. Stevenson
+  orcid: 0000-0002-2809-8084
   affiliation: 2
+- name: Sally L. Collins
+  orcid: 0000-0002-0648-7433
+  affiliation: 1
 affiliations:
-- name: Space Telescope Science Institute
+- name: University of Oxford
   index: 1
-- name: Disney Inc.
+- name: University of New South Wales
   index: 2
 date: 14 February 2016
 bibliography: paper.bib
@@ -22,19 +24,9 @@ bibliography: paper.bib
 
 # Summary
 
-- A summary describing the high-level functionality and purpose of the software
-for a diverse, non-specialist audience
-- A clear statement of need that illustrates the purpose of the software
-- A list of key references including a link to the software archive
-- Mentions (if applicable) of any ongoing research projects using the software
-or recent scholarly publications enabled by it
+The Kretzfile format is used to store 3D ultrasound data from GE Voluson ultrasound scanners. The geometry used in these files is a toroidal coordinate system. 
+We present ITK transformation and utilities to convert Kretzfiles to cartesian coordinates. Previous work [@SklicerHeart] has enabled the reading of kretz files and approximate coordinate transformations.
+This work will enable medical imaging researchers to investigate clinically 3D ultraound. 
 
-Citations to entries in paper.bib should be in
-[rMarkdown](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html)
-format.
-
-This is an example citation [@figshare_archive].
-
-Figures can be included like this: ![Fidgit deposited in figshare.](figshare_article.png)
 
 # References
