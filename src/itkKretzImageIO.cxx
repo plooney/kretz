@@ -139,21 +139,18 @@ void KretzImageIO::ReadImageInformation()
     {
       unsigned short dimension;
       inputFileStream.read(reinterpret_cast<char *>(&dimension), taglength); 
-      std::cout << dimension << std::endl;
       this->SetDimensions(0,dimension);
     } 
     else if(tag==DimensionYTag)
     {
       unsigned short dimension;
       inputFileStream.read(reinterpret_cast<char *>(&dimension), taglength); 
-      std::cout << dimension << std::endl;
       this->SetDimensions(1,dimension);
     } 
     else if(tag==DimensionZTag)
     {
       unsigned short dimension;
       inputFileStream.read(reinterpret_cast<char *>(&dimension), taglength); 
-      std::cout << dimension << std::endl;
       this->SetDimensions(2,dimension);
     } 
     else if(tag==ResolutionTag)
