@@ -93,7 +93,6 @@ void KretzImageIO::Read(void *buffer)
     {
 
       inputFileStream.read(reinterpret_cast<char *>(buffer), taglength); 
-      std::cout << "Found image data len: " << taglength << tag << std::endl;
 
     } 
     else {
@@ -133,7 +132,6 @@ void KretzImageIO::ReadImageInformation()
     {
       char patient_name_c_array[taglength]; 
       inputFileStream.read(reinterpret_cast<char *>(patient_name_c_array), taglength); 
-      std::cout << std::string(patient_name_c_array) << std::endl;
       std::string tagString(tag);
       EncapsulateMetaData< std::string >( dico, tagString, std::string(patient_name_c_array) );
     }
