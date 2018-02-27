@@ -17,4 +17,4 @@ make test
 
 ** How to create docs **
 
-make docs
+make doc
