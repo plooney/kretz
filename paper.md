@@ -12,12 +12,14 @@ authors:
   affiliation: 2
 - name: Sally L. Collins
   orcid: 0000-0002-0648-7433
-  affiliation: 1
+  affiliation: "1, 3"
 affiliations:
-- name: University of Oxford
+- name: Nuffield Department of Obstetrics and Gynaecology, University of Oxford,Level 3, Women’s Centre, John Radcliffe Hospital, Oxford
   index: 1
-- name: University of New South Wales
+- name: School of Womens and Childrens Health, University of New South Wales, Randwick, NSW, Australia
   index: 2
+- name: Fetal Medicine Unit, The Womens Centre, John Radcliffe Hospital Oxford
+  index: 3
 date: 14 February 2016
 bibliography: paper.bib
 ---
