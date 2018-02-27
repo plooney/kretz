@@ -11,8 +11,10 @@
 
 `ITK, Boost, Doxygen and GraphViz (for documentation)`
 
-Python 3.5 recommended.
-
 ** How to run tests **
 
 make test
+
+** How to create docs **
+
+make docs
