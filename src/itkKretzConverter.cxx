@@ -234,7 +234,6 @@ int execute(std::string filename, std::string filename_out, std::vector<int> siz
 	  resampleFilter->SetSize(size);
 	  resampleFilter->SetOutputOrigin(origin);
 	  resampleFilter->SetOutputSpacing(spacing);
-	  std::cout << "here" << spacing[0] << std::endl;
 	  resampleFilter->Update();
 	  ImageType::Pointer output = resampleFilter->GetOutput(); 
 
