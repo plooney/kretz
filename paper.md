@@ -25,10 +25,14 @@ bibliography: paper.bib
 ---
 
 # Summary
-
-The Kretzfile format is used to store 3D ultrasound data from GE Voluson ultrasound scanners. The geometry used in these files is a toroidal coordinate system. 
+The Kretzfile format is used to store 3D ultrasound data from GE Voluson ultrasound scanners. The geometry used in these files is a toroidal coordinate system. Cartesian coordinates are required to allow application of advanced image libraries like ITK and scikit-image.  
 We present ITK transformation and utilities to convert Kretzfiles to cartesian coordinates. Previous work [@SklicerHeart] has enabled the reading of kretz files and approximate coordinate transformations.
 This work will enable medical imaging researchers to investigate clinically 3D ultrasound. 
 
+# Tests
+
+There are four tests included. A sample KretzFile is downloaded to the test directory and is used in the first three tests. The first test runs the executable KretzFileWriter and writes the image data out to a Nifti format where the coordinates are in toroidal format. The second test runs the executable KretzConverter to output the image data to the cartesian coordinates with a voxel spacing of 0.6mm. The third test runs the executable KretzFileWriter to convert the output from the second test back into the toroidal coordinate system and saves the resulting image in Nifti format. These executables will allow researchers to analyes 3D ultrasound data in uncompressed Kretzfile format. By allowing the mapping back and forth from the toroidal coordinate system analysis can be performed in either coordinate system.
+
+![The toroidal planes through the volume are shown on the top row. The cartesian planes are shown on the bottom row.](docs/Toroidal_Cartesian.png)
 
 # References
