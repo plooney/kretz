@@ -11,15 +11,15 @@
 
 `ITK, Boost, Doxygen and GraphViz (for documentation)`
 
-** How to build **
+**How to build**
 
 Use cmake and make
 
-** How to run tests **
+**How to run tests**
 
 make test
 
-** How to create docs **
+**How to create docs**
 
 make doc
 
