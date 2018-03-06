@@ -5,7 +5,7 @@
 * KRETZ is a small library to enable reading a 3D Ultrasound Kretzfile and to convert between the toroidal geometry and cartesian space and visa versa 
 * Version 0.01
 * Two executabels are KretzWriter and KretzConverter to perform the conversion
-* The first three tests found in the CMakeList.txt file descibe the use and command line options of the executables to convert between the different geometries
+* The first three tests found in the CMakeList.txt file descibe the use and command line options of the executables to convert between the different geometries. The source files for these executables show how the geometry conversion can be performed and integrated in ITK pipelines.
 
 ### How do I get set up? ###
 
