@@ -65,7 +65,6 @@ std::ostream & operator<<(std::ostream & Str, Tag const & v) {
 	  Str << string; 
 	  return Str;
 };
-
 static Tag PatientTag(0x0110, 0x0002);
 static Tag DimensionXTag(0xc000, 0x0001);
 static Tag DimensionYTag(0xc000, 0x0002);
@@ -81,6 +80,22 @@ static Tag SizeFramesTag(0xd400, 0x0002);
 static Tag TimingFramesTag(0xd400, 0x0005);
 static Tag Image4dTag(0xd600, 0x0001);
 
+/*
+static Tag PatientTag(0x0110, 0x0002);
+static Tag DimensionXTag(0xc000, 0x0201);
+static Tag DimensionYTag(0xc000, 0x0202);
+static Tag DimensionZTag(0xc000, 0x0203);
+static Tag ResolutionTag(0xc100, 0x0201);
+static Tag Offset1Tag(0xc200, 0x0201);
+static Tag Offset2Tag(0xc200, 0x0202);
+static Tag AnglesPhiTag(0xc300, 0x0201);
+static Tag AnglesThetaTag(0xc300, 0x0202);
+static Tag ImageTag(0xd000, 0x0201);
+static Tag CineFramesTag(0xd400, 0x0001);
+static Tag SizeFramesTag(0xd400, 0x0002);
+static Tag TimingFramesTag(0xd400, 0x0005);
+static Tag Image4dTag(0xd600, 0x0201);
+*/
 /** \class KretzImageIO
  *
  *  \brief ImageIO class for reading Kretzfile V1.0 

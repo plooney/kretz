@@ -64,6 +64,12 @@ if(BUILD_TESTING)
 	file(DOWNLOAD https://drive.google.com/uc?export=download&id=1TYurqAZ0Ya9f7aZY5_DcfsscSMlKIYUN test/test.vol 
 		EXPECTED_MD5 32631727d0202dc825f12418806f2f13 
 		)
+	file(DOWNLOAD https://drive.google.com/uc?export=download&id=1_HWTBnQ0rZhY5wtIdVoKVWhqWvWi-f8f expected_test_output/test_cartesian.nii.gz 
+		EXPECTED_MD5 a26bdeec4e43a122b68c7bbfcd35d54c
+		)
+	file(DOWNLOAD https://drive.google.com/uc?export=download&id=1H9oRUeTMkzjS5hhsfLXne-HEUZiEYm1B expected_test_output/test_toroidal.nii.gz 
+		EXPECTED_MD5 1a307bbcd05ad9d5bbd02ef2fbdeaf50
+		)
 endif()
 
 find_package(Doxygen)
