@@ -183,9 +183,17 @@ int execute(std::string filename, std::string filename_out, std::vector<int> siz
 	  spacing[0] = resol_vec.at(0);
 	  spacing[1] = resol_vec.at(1);
 	  spacing[2] = resol_vec.at(2);
+
+	  typedef typename DoubleImageType::SizeType SizeType;
+	  SizeType size;
+	  size[0]= size_vec[0];
+	  size[1]= size_vec[1];
+	  size[2]= size_vec[2];
+
 	  typename ResampleFilterType::Pointer resampleFilter = ResampleFilterType::New();
     resampleFilter->SetInput(toroidalImage);
 	  resampleFilter->SetTransform(c2t);
+	  resampleFilter->SetSize(size);
 	  resampleFilter->SetOutputOrigin(origin);
 	  resampleFilter->SetOutputSpacing(spacing);
 	  resampleFilter->Update();
