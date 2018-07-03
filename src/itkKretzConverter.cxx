@@ -98,7 +98,7 @@ BoundingBoxType::BoundsArrayType computeBounds(ImageType::Pointer image, T2CTran
 }
 
 
-int execute(std::string filename, std::string filename_out, std::vector<int> size_vec,std::vector<float> resol_vec, bool flagMask, bool flagNormalise, bool flagThreshold)
+int execute(std::string filename, std::string filename_out, std::vector<int> size_vec,std::vector<float> resol_vec, bool flagMask, bool flagNormalise, bool flagThreshold, bool isDoppler)
 {
   typedef itk::ImageFileReader< ImageType > ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
@@ -116,9 +116,19 @@ int execute(std::string filename, std::string filename_out, std::vector<int> siz
   t2c->SetResolution(kretzImageIO->GetResolution());
   t2c->SetTableTheta(kretzImageIO->m_TableAnglesTheta);
   t2c->SetTablePhi(kretzImageIO->m_TableAnglesPhi);
+  
 
   //Find the bounds of the toroidal volume in cartesian coordinates
   BoundingBoxType::BoundsArrayType bounds = computeBounds(toroidalImage, t2c);
+  if(isDoppler){
+	  reader = ReaderType::New();
+	  reader->SetFileName( filename );
+	  kretzImageIO = ImageIOType::New();
+	  kretzImageIO->SetisDoppler(isDoppler);
+	  reader->SetImageIO( kretzImageIO );
+	  reader->Update();
+	  toroidalImage = reader->GetOutput();
+  }
 
   std::cout << "size " << size_vec.size() << std::endl;
   std::cout << "resol " << resol_vec.size() << std::endl;
@@ -176,7 +186,7 @@ int execute(std::string filename, std::string filename_out, std::vector<int> siz
 	  c2t->SetResolution(kretzImageIO->GetResolution());
 	  c2t->SetTableTheta(kretzImageIO->m_TableAnglesTheta);
 	  c2t->SetTablePhi(kretzImageIO->m_TableAnglesPhi);
-	  typedef itk::ResampleImageFilter<ImageType,DoubleImageType> ResampleFilterType;
+	  typedef itk::ResampleImageFilter<DoubleImageType,DoubleImageType> ResampleFilterType;
 
 	  typedef DoubleImageType::SpacingType SpacingType;
 	  SpacingType spacing;
@@ -191,7 +201,7 @@ int execute(std::string filename, std::string filename_out, std::vector<int> siz
 	  size[2]= size_vec[2];
 
 	  typename ResampleFilterType::Pointer resampleFilter = ResampleFilterType::New();
-    resampleFilter->SetInput(toroidalImage);
+          resampleFilter->SetInput(normImage);
 	  resampleFilter->SetTransform(c2t);
 	  resampleFilter->SetSize(size);
 	  resampleFilter->SetOutputOrigin(origin);
@@ -267,6 +277,7 @@ int main(int argc, char ** argv)
     bool flagMask = false;
     bool flagNormalise = false;
     bool flagThreshold = false;
+    bool flagDoppler = false;
 
     desc.add_options()
             ("help,h", "produce help message")
@@ -277,6 +288,7 @@ int main(int argc, char ** argv)
             ("mask,m", po::bool_switch(&flagMask), "mask volume")
             ("normalise,n", po::bool_switch(&flagNormalise), "normalise volume")
             ("threshold,t", po::bool_switch(&flagThreshold), "threshold volume")
+            ("isDoppler,d", po::bool_switch(&flagDoppler), "output power Doppler")
             ;
 
     try
@@ -292,7 +304,7 @@ int main(int argc, char ** argv)
 
         po::notify(vm);
 
-        return execute(filename,filename_out,size_vec,resol_vec,flagMask,flagNormalise,flagThreshold);
+        return execute(filename,filename_out,size_vec,resol_vec,flagMask,flagNormalise,flagThreshold,flagDoppler);
 
     }
     catch(std::exception& e)

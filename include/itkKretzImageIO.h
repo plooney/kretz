@@ -66,6 +66,10 @@ std::ostream & operator<<(std::ostream & Str, Tag const & v) {
 	  return Str;
 };
 static Tag PatientTag(0x0110, 0x0002);
+static Tag CineFramesTag(0xd400, 0x0001);
+static Tag SizeFramesTag(0xd400, 0x0002);
+static Tag TimingFramesTag(0xd400, 0x0005);
+
 static Tag DimensionXTag(0xc000, 0x0001);
 static Tag DimensionYTag(0xc000, 0x0002);
 static Tag DimensionZTag(0xc000, 0x0003);
@@ -75,9 +79,6 @@ static Tag Offset2Tag(0xc200, 0x0002);
 static Tag AnglesPhiTag(0xc300, 0x0001);
 static Tag AnglesThetaTag(0xc300, 0x0002);
 static Tag ImageTag(0xd000, 0x0001);
-static Tag CineFramesTag(0xd400, 0x0001);
-static Tag SizeFramesTag(0xd400, 0x0002);
-static Tag TimingFramesTag(0xd400, 0x0005);
 static Tag Image4dTag(0xd600, 0x0001);
 
 /*
@@ -96,6 +97,17 @@ static Tag SizeFramesTag(0xd400, 0x0002);
 static Tag TimingFramesTag(0xd400, 0x0005);
 static Tag Image4dTag(0xd600, 0x0201);
 */
+
+static Tag DimensionXTagDoppler(0xc000, 0x0201);
+static Tag DimensionYTagDoppler(0xc000, 0x0202);
+static Tag DimensionZTagDoppler(0xc000, 0x0203);
+static Tag ResolutionTagDoppler(0xc100, 0x0201);
+static Tag Offset1TagDoppler(0xc200, 0x0201);
+static Tag Offset2TagDoppler(0xc200, 0x0202);
+static Tag AnglesPhiTagDoppler(0xc300, 0x0201);
+static Tag AnglesThetaTagDoppler(0xc300, 0x0202);
+static Tag ImageTagDoppler(0xd000, 0x0201);
+static Tag Image4dTagDoppler(0xd600, 0x0201);
 /** \class KretzImageIO
  *
  *  \brief ImageIO class for reading Kretzfile V1.0 
@@ -157,7 +169,8 @@ public:
   itkSetMacro(rD, double);
   itkGetMacro(Resolution, double);
   itkSetMacro(Resolution, double);
-
+  itkGetMacro(isDoppler, bool);
+  itkSetMacro(isDoppler, bool);
 
 protected:
   KretzImageIO();
@@ -167,8 +180,7 @@ protected:
   double m_Resolution;
   double m_rBstart;
   double m_rD;
-
-
+  bool m_isDoppler = false;
 
 private:
   ITK_DISALLOW_COPY_AND_ASSIGN(KretzImageIO);
