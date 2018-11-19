@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 2.8)
-include(${CMAKE_SOURCE_DIR}/IJMacros.txt)
 include(ExternalProject)
 
 project(ToroidalTransform)
@@ -11,18 +10,10 @@ enable_testing()
 include(Dart)
 
 find_package( Boost 1.58 COMPONENTS program_options REQUIRED )
+find_package(ITK REQUIRED)
 include_directories(src include ${Boost_INCLUDE_DIR} )
 
-SET(Required_Packages
-	ITK
-	)
-foreach(Package ${Required_Packages})
-	loadpackage(${Package})
-endforeach(Package)
-
 set(Libraries ${ITK_LIBRARIES})
-#add_subdirectory(src)
-#add_subdirectory(include)
 
 set(SOURCE
 	src/itkKretzWriter.cxx
