@@ -19,7 +19,7 @@ set(SOURCE
 	src/itkKretzWriter.cxx
 	src/itkKretzImageIO.cxx
 	)
-
+include( ${ITK_USE_FILE} )
 add_executable(KretzFileWriter ${SOURCE} )
 target_link_libraries(KretzFileWriter ${} ${ITK_LIBRARIES} ${Boost_LIBRARIES})
 
