@@ -36,8 +36,8 @@ int execute(std::string filename, std::string filename_out, std::string filename
     return EXIT_FAILURE;
   }
   InputImageType::Pointer inputImage = reader->GetOutput();
-  typedef itk::MetaDataDictionary   DictionaryType;
-  DictionaryType & dictionary = inputImage->GetMetaDataDictionary();
+  //typedef itk::MetaDataDictionary   DictionaryType;
+  //DictionaryType & dictionary = inputImage->GetMetaDataDictionary();
 
   //If a cartesian file is supplied transform it back to toroidal 
   //space using the geometry of the supplied kretz file
@@ -114,9 +114,9 @@ int main(int argc, char* argv[])
   std::string filename, filename_cartesian, filename_out;
   po::options_description desc("Allowed options");
 
-  bool flagMask = false;
-  bool flagNormalise = false;
-  bool flagThreshold = false;
+  //bool flagMask = false;
+  //bool flagNormalise = false;
+  //bool flagThreshold = false;
 
   desc.add_options()
     ("help,h", "produce help message")

@@ -24,7 +24,7 @@ std::vector<std::pair<double,double>> createTable(std::vector<double> angles){
 
     std::vector<std::pair<double,double>> table;
 
-    for(int i=0; i<angles.size(); i++){
+    for(unsigned int i=0; i<angles.size(); i++){
         table.push_back(std::make_pair(angles[i], i));
     }
 

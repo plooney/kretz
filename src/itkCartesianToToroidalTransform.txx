@@ -78,8 +78,6 @@ TransformPoint(const InputPointType &point) const
   z = point[2];
 
   double pRB, phi, theta;
-  double xsq, ysq, zsq, rDsq, tworDz, tmpone, tmptwo, tmpthree, denom;
-
 
   phi = std::atan(-y/(m_BModeRadius-z));
   double arg1 = std::pow( m_BModeRadius - (-y / std::sin(phi)), 2);

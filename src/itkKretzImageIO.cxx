@@ -42,7 +42,6 @@ bool KretzImageIO::CanReadFile(const char *filename)
   }
 
   // sniff for the KRETZ signature 
-  bool kretzsig(false);
   {
     file.seekg(0,std::ios_base::beg);
     if(file.fail() || file.eof())
@@ -58,7 +57,6 @@ bool KretzImageIO::CanReadFile(const char *filename)
     std::string sig(buf);
     if(sig == "KRETZFILE 1.0   ")
     {
-      kretzsig = true;
       return true;
     }
   }
@@ -85,7 +83,6 @@ void KretzImageIO::Read(void *buffer)
   {
     inputFileStream.read(reinterpret_cast<char *>(&tag_shorts), sizeof(tag_shorts)); 
     inputFileStream.read(reinterpret_cast<char *>(&taglength), sizeof(taglength)); 
-    bool val_unread = true;
 
     Tag tag(tag_shorts[0],tag_shorts[1]);
 
