@@ -19,14 +19,16 @@ Use cmake and make
 
 **Programs**
 
-KretzFileWriter either takes a KRETZ file and outputs the voxels in the geometry of the 3D ultrasound probe. One dimension corresponds to radial distance and the others correspond to the angles. The spacing is not isotropic and can be found in the KRETZ file. KretzFileWriter can take a cartesian geometry and a KRETZ file and convert the cartesian geometry back into the geometry specified in the KRETZ file.
+*KretzFileWriter* either takes a KRETZ file and outputs the voxels in the geometry of the 3D ultrasound probe. One dimension corresponds to radial distance and the others correspond to the angles. The spacing is not isotropic and can be found in the KRETZ file. KretzFileWriter can take a cartesian geometry and a KRETZ file and convert the cartesian geometry back into the geometry specified in the KRETZ file.
 
-  *arguments: 
+  arguments: 
    - i - input KRETZ file
    - c - optional cartesian file to convert back into geometry specified in the KRETZ file 
    - o - path for the output file
 
-KretzConverter takes a KRETZ file and converts it to cartesian coordinates.
+*KretzConverter* takes a KRETZ file and converts it to cartesian coordinates.
+
+  arguments: 
    - i - input KRETZ file
    - o - path for the output file
    - r - three floating point values corresponding to the voxel spacing in each direction, if not specified s must be
