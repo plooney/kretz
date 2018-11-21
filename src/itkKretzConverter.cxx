@@ -98,7 +98,7 @@ BoundingBoxType::BoundsArrayType computeBounds(ImageType::Pointer image, T2CTran
 }
 
 
-int execute(std::string filename, std::string filename_out, std::vector<int> size_vec,std::vector<float> resol_vec, bool flagMask, bool flagNormalise, bool flagThreshold, bool isDoppler)
+int execute(std::string filename, std::string filename_out, std::vector<int> size_vec,std::vector<float> resol_vec, bool flagMask, bool flagNormalise, bool isDoppler)
 {
   typedef itk::ImageFileReader< ImageType > ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
@@ -276,7 +276,6 @@ int main(int argc, char ** argv)
 
     bool flagMask = false;
     bool flagNormalise = false;
-    bool flagThreshold = false;
     bool flagDoppler = false;
 
     desc.add_options()
@@ -287,7 +286,6 @@ int main(int argc, char ** argv)
             ("size,s", po::value<std::vector<int>>(&size_vec)->multitoken(), "set size")
             ("mask,m", po::bool_switch(&flagMask), "mask volume")
             ("normalise,n", po::bool_switch(&flagNormalise), "normalise volume")
-            ("threshold,t", po::bool_switch(&flagThreshold), "threshold volume")
             ("isDoppler,d", po::bool_switch(&flagDoppler), "output power Doppler")
             ;
 
@@ -304,7 +302,7 @@ int main(int argc, char ** argv)
 
         po::notify(vm);
 
-        return execute(filename,filename_out,size_vec,resol_vec,flagMask,flagNormalise,flagThreshold,flagDoppler);
+        return execute(filename,filename_out,size_vec,resol_vec,flagMask,flagNormalise,flagDoppler);
 
     }
     catch(std::exception& e)
