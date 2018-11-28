@@ -8,5 +8,6 @@
 !*.cxx
 !*.txx
 !*.h
+!*.hxx
 !*/
 !.gitignore
