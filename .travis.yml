@@ -15,7 +15,7 @@ cache:
 matrix:
   include:
     - os: linux
-      dist: xenial 
+      dist: bionic 
       sudo: required
 
 before_script:
