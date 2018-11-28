@@ -31,7 +31,7 @@ const char * KretzImageIOFactory::GetDescription() const
 
 static bool KretzImageIOFactoryHasBeenRegistered;
 
-void ITKIOKretz_EXPORT KretzImageIOFactoryRegister__Private(void)
+void KretzImageIOFactoryRegister__Private(void)
 {
   if( ! KretzImageIOFactoryHasBeenRegistered )
     {

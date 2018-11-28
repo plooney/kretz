@@ -15,8 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkGDCMImageIOFactory_h
-#define itkGDCMImageIOFactory_h
+#ifndef itkKretzImageIOFactory_h
+#define itkKretzImageIOFactory_h
 
 #include "itkObjectFactoryBase.h"
 #include "itkImageIOBase.h"
@@ -27,7 +27,7 @@ namespace itk
  * \brief Create instances of KretzImageIO objects using an object factory.
  * \ingroup ITKIOKretz
  */
-class KretzImageIOFactory:public ObjectFactoryBase
+class KretzImageIOFactory: public ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
@@ -46,6 +46,8 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(KretzImageIOFactory, ObjectFactoryBase);
+      
+  void KretzImageIOFactoryRegister__Private(void);
 
   /** Register one factory of this type  */
   static void RegisterOneFactory()
@@ -65,3 +67,4 @@ private:
 } // end namespace itk
 
 #endif
+

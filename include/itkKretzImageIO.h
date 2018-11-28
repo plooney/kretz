@@ -159,9 +159,9 @@ public:
 
   void GetPatientName(char *name);
 
-  typedef std::vector<std::pair<double, double>> TTableAngleType;
-  std::vector<std::pair<double, double>> m_TableAnglesTheta;
-  std::vector<std::pair<double, double>> m_TableAnglesPhi;
+  typedef std::vector<std::pair<double, double> > TTableAngleType;
+  std::vector<std::pair<double, double> > m_TableAnglesTheta;
+  std::vector<std::pair<double, double> > m_TableAnglesPhi;
 
   itkSetMacro(rBstart, double);
   itkGetMacro(rBstart, double);

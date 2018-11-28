@@ -3,6 +3,7 @@
 #include "itkImage.h"
 #include "itkMetaDataObject.h"
 #include "itkKretzImageIO.h"
+#include "itkKretzImageIOFactory.h"
 #include "itkToroidalToCartesianTransform.h"
 #include <itkResampleImageFilter.h>
 #include "itkNearestNeighborInterpolateImageFunction.h"

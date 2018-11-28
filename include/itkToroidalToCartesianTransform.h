@@ -184,10 +184,8 @@ private:
 
 
 }  // namespace itk
-
-
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "itkToroidalToCartesianTransform.txx"
+#include "itkToroidalToCartesianTransform.hxx"
 #endif
 
 #endif /* __itkToroidalToCartesianTransform_h */

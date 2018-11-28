@@ -183,9 +183,8 @@ private:
 }; //class CartesianToToroidalTransform
 
 }  // namespace itk
-
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "itkCartesianToToroidalTransform.txx"
+#include "itkCartesianToToroidalTransform.hxx"
 #endif
 
 #endif /* __itkCartesianToToroidalTransform_h */
