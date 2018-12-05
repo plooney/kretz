@@ -27,7 +27,7 @@ before_script:
   - git clone https://github.com/InsightSoftwareConsortium/ITK.git
   - mkdir ITK-build; cd ITK-build
   - cmake ../ITK
-  - make
+  - make -j 10
   - sudo make install
 
 script:
