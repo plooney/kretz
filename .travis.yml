@@ -24,6 +24,11 @@ before_script:
   - echo "y\n" | sudo bash "${ExternalData_OBJECT_STORES}/${CMAKE_DOWNLOAD_FILE}" --prefix=/usr/local --exclude-subdir
   - cmake --version
   - mkdir -p ${KRETZ_BUILD_DIR}
+  - git clone https://github.com/InsightSoftwareConsortium/ITK.git
+  - mkdir ITK-build; cd ITK-build
+  - cmake ../ITK
+  - make
+  - sudo make install
 
 script:
   - cd ${KRETZ_BUILD_DIR}
