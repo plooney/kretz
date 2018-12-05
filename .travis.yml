@@ -26,7 +26,7 @@ before_script:
   - mkdir -p ${KRETZ_BUILD_DIR}
   - git clone https://github.com/InsightSoftwareConsortium/ITK.git
   - mkdir ITK-build; cd ITK-build
-  - cmake ../ITK
+  - cmake ../ITK -DBUILD_EXAMPLES=OFF
   - make -j 10
   - sudo make install
 
