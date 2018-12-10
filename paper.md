@@ -26,7 +26,7 @@ bibliography: paper.bib
 
 # Summary
 The Kretzfile format is used to store 3D ultrasound data from GE Voluson ultrasound scanners. The geometry used in these files is a toroidal coordinate system. Cartesian coordinates are required to allow application of advanced image libraries like ITK and scikit-image.  
-We present ITK transformation and utilities to convert Kretzfiles to cartesian coordinates. Previous work [@SklicerHeart] has enabled the reading of kretz files and approximate coordinate transformations.
+We present ITK transformation and utilities to convert Kretzfiles to cartesian coordinates. Previous work [@SlicerHeart] has enabled the reading of kretz files and approximate coordinate transformations.
 This work will enable medical imaging researchers to investigate clinically 3D ultrasound. 
 
 # Tests
