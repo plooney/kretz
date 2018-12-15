@@ -160,8 +160,8 @@ int main(int ,char *[] )
     cartesianOrigin[1] = -125.04386901855469;
     cartesianOrigin[2] = 20.098983764648438;
 
-    ImageType::SizeType cartesian_size = {410, 418, 318};
-    ImageType::SizeType size_toroidal = {580, 180, 142};
+    ImageType::SizeType cartesian_size = {{410, 418, 318}};
+    ImageType::SizeType size_toroidal = {{580, 180, 142}};
 
     typedef itk::ResampleImageFilter<ImageType,ImageType> ResampleFilterType;
     typename ResampleFilterType::Pointer resampleFilter = ResampleFilterType::New();
