@@ -115,11 +115,11 @@ public:
      * This method transforms first two dimensions of a point from polar
      * coordinates <alpha,radius> to cartesian coordinates.
      */
-    OutputPointType     TransformPoint(const InputPointType  &point ) const;
+    OutputPointType TransformPoint(const InputPointType  &point ) const override;
 
     /** Method to transform a vector - not applicable for this type of
       transform. */
-    virtual OutputVectorType TransformVector(const InputVectorType &) const
+    OutputVectorType TransformVector(const InputVectorType &) const override
     {
         itkExceptionMacro(<< "Method not applicable for polar transform." );
         return OutputVectorType();
@@ -127,7 +127,7 @@ public:
 
     /** Method to transform a vnl_vector - not applicable for this type of
       transform. */
-    virtual OutputVnlVectorType TransformVector(const InputVnlVectorType &) const
+    OutputVnlVectorType TransformVector(const InputVnlVectorType &) const override
     {
         itkExceptionMacro(<< "Method not applicable for polar transform. ");
         return OutputVnlVectorType();
@@ -135,8 +135,8 @@ public:
 
     /** Method to transform a CovariantVector - not applicable for this type of
       transform */
-    virtual OutputCovariantVectorType TransformCovariantVector(
-            const InputCovariantVectorType &) const
+    OutputCovariantVectorType TransformCovariantVector(
+            const InputCovariantVectorType &) const override
     {
         itkExceptionMacro(<< "Method not applicable for polar transfrom. ");
         return OutputCovariantVectorType();
@@ -144,7 +144,7 @@ public:
 
     /** Compute the Jacobian Matrix of the transformation at one point - not
       applicable for this type of transform */
-    virtual void ComputeJacobianWithRespectToPosition( const InputPointType &, JacobianType &)  const
+    void ComputeJacobianWithRespectToPosition( const InputPointType &, JacobianType &)  const override
     {
         itkExceptionMacro(<< "Method not applicable for polar transform. ");
         //return this->m_Jacobian;
@@ -152,7 +152,7 @@ public:
 
     /** Compute the Jacobian Matrix of the transformation at one point - not
       applicable for this type of transform */
-    virtual void ComputeJacobianWithRespectToParameters( const InputPointType &, JacobianType &)  const
+    void ComputeJacobianWithRespectToParameters( const InputPointType &, JacobianType &)  const override
     {
         itkExceptionMacro(<< "Method not applicable for polar transform. ");
         //return this->m_Jacobian;
@@ -161,10 +161,10 @@ public:
     virtual void SetTableTheta(const TableType);
     virtual void SetTablePhi(const TableType);
 
-    virtual void SetParameters(const ParametersType &){
+    void SetParameters(const ParametersType &) override {
 
     }
-    virtual void SetFixedParameters(const FixedParametersType &){
+    void SetFixedParameters(const FixedParametersType &) override {
 
     }
 
@@ -173,7 +173,7 @@ protected:
     ~CartesianToToroidalTransform();
 
     /** Print contents of an CartesianToToroidalTransform. */
-    void PrintSelf(std::ostream &os, Indent indent) const;
+    void PrintSelf(std::ostream &os, Indent indent) const override;
 
 private:
     CartesianToToroidalTransform(const Self&); //purposely not implemented
