@@ -1,0 +1,3 @@
+src/itkKretzImageIO\.cxx Namespace Disable
+src/itkKretzImageIO\.cxx Comments Disable
+src/itkKretzImageIO\.cxx InternalVariables Disable

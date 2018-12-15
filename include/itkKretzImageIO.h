@@ -26,105 +26,27 @@ namespace itk
 {
 
 
-/**
- *Class to abstract a group and element for reading a Kretz file.
- */
-class Tag
-{
-public:
-  Tag();
-  Tag(unsigned short group, unsigned short element){
-    this->group = group;
-    this->element = element;
-  };
-  ~Tag(){};
-  unsigned short group;
-  unsigned short element;
-  bool operator==(Tag& other) const
-  {
-    if(this == &other) return true; //This is the pointer for 
-    if(this->group == other.group && this->element==other.element) return true;
-    else return false;
-  }
-  operator std::string() const { 
-	  std::stringstream stream;
-	  stream << std::hex << this->group;
-	  std::string result1( stream.str() );
-
-	  stream << std::hex << this->element;
-	  std::string result2( stream.str() );
-	  std::string result(result1 + "|" + result2);
-
-	  return result;
-  }
-};
-
-inline
-std::ostream & operator<<(std::ostream & Str, Tag const & v) { 
-	  std::string string(v);
-	  Str << string; 
-	  return Str;
-};
-static Tag PatientTag(0x0110, 0x0002);
-static Tag CineFramesTag(0xd400, 0x0001);
-static Tag SizeFramesTag(0xd400, 0x0002);
-static Tag TimingFramesTag(0xd400, 0x0005);
-
-static Tag DimensionXTag(0xc000, 0x0001);
-static Tag DimensionYTag(0xc000, 0x0002);
-static Tag DimensionZTag(0xc000, 0x0003);
-static Tag ResolutionTag(0xc100, 0x0001);
-static Tag Offset1Tag(0xc200, 0x0001);
-static Tag Offset2Tag(0xc200, 0x0002);
-static Tag AnglesPhiTag(0xc300, 0x0001);
-static Tag AnglesThetaTag(0xc300, 0x0002);
-static Tag ImageTag(0xd000, 0x0001);
-static Tag Image4dTag(0xd600, 0x0001);
-
-/*
-static Tag PatientTag(0x0110, 0x0002);
-static Tag DimensionXTag(0xc000, 0x0201);
-static Tag DimensionYTag(0xc000, 0x0202);
-static Tag DimensionZTag(0xc000, 0x0203);
-static Tag ResolutionTag(0xc100, 0x0201);
-static Tag Offset1Tag(0xc200, 0x0201);
-static Tag Offset2Tag(0xc200, 0x0202);
-static Tag AnglesPhiTag(0xc300, 0x0201);
-static Tag AnglesThetaTag(0xc300, 0x0202);
-static Tag ImageTag(0xd000, 0x0201);
-static Tag CineFramesTag(0xd400, 0x0001);
-static Tag SizeFramesTag(0xd400, 0x0002);
-static Tag TimingFramesTag(0xd400, 0x0005);
-static Tag Image4dTag(0xd600, 0x0201);
-*/
-
-static Tag DimensionXTagDoppler(0xc000, 0x0201);
-static Tag DimensionYTagDoppler(0xc000, 0x0202);
-static Tag DimensionZTagDoppler(0xc000, 0x0203);
-static Tag ResolutionTagDoppler(0xc100, 0x0201);
-static Tag Offset1TagDoppler(0xc200, 0x0201);
-static Tag Offset2TagDoppler(0xc200, 0x0202);
-static Tag AnglesPhiTagDoppler(0xc300, 0x0201);
-static Tag AnglesThetaTagDoppler(0xc300, 0x0202);
-static Tag ImageTagDoppler(0xd000, 0x0201);
-static Tag Image4dTagDoppler(0xd600, 0x0201);
 /** \class KretzImageIO
  *
- *  \brief ImageIO class for reading Kretzfile V1.0 
- *  The pixel spacing in the toroidal space is not fixed. The variable angel spacing and radial resolution are stored in class variables. Hence, the spacing and origin do not correspond to real world values. 
- *  Writing is not supported. 
  *
- *  \ingroup IOFilters
+ *  \brief ImageIO class for reading Kretzfile V1.0
  *
- * \ingroup ITKIOKRETZ
+ * The pixel spacing in the toroidal space is not fixed. The variable angel
+ * spacing and radial resolution are stored in class variables. Hence, the
+ * spacing and origin do not correspond to real world values.
+ *
+ * Writing is not supported.
+ *
+ * \ingroup IOFilters
+ *
+ * \ingroup IOKretz
  *
  */
-class InternalHeader;
 class KretzImageIO:public ImageIOBase
 {
 public:
   /** Standard class typedefs. */
-  typedef KretzImageIO          Self;
+  typedef KretzImageIO         Self;
   typedef ImageIOBase          Superclass;
   typedef SmartPointer< Self > Pointer;
 
@@ -163,14 +85,14 @@ public:
   std::vector<std::pair<double, double> > m_TableAnglesTheta;
   std::vector<std::pair<double, double> > m_TableAnglesPhi;
 
-  itkSetMacro(rBstart, double);
-  itkGetMacro(rBstart, double);
-  itkGetMacro(rD, double);
-  itkSetMacro(rD, double);
+  itkSetMacro(RadiusBStart, double);
+  itkGetMacro(RadiusBStart, double);
+  itkGetMacro(RadiusD, double);
+  itkSetMacro(RadiusD, double);
   itkGetMacro(Resolution, double);
   itkSetMacro(Resolution, double);
-  itkGetMacro(isDoppler, bool);
-  itkSetMacro(isDoppler, bool);
+  itkGetMacro(IsDoppler, bool);
+  itkSetMacro(IsDoppler, bool);
 
 protected:
   KretzImageIO();
@@ -178,9 +100,10 @@ protected:
   virtual void PrintSelf(std::ostream & os, Indent indent) const ITK_OVERRIDE;
 
   double m_Resolution;
-  double m_rBstart;
-  double m_rD;
-  bool m_isDoppler = false;
+  double m_RadiusBStart;
+  double m_RadiusD;
+
+  bool m_IsDoppler = false;
 
 private:
   ITK_DISALLOW_COPY_AND_ASSIGN(KretzImageIO);

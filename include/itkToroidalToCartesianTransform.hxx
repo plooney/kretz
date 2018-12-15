@@ -1,8 +1,25 @@
-
-#ifndef _itkToroidalToCartesianTransform_txx
-#define _itkToroidalToCartesianTransform_txx
+/*=========================================================================
+ *
+ *  Copyright Insight Software Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *=========================================================================*/
+#ifndef itkToroidalToCartesianTransform_hxx
+#define itkToroidalToCartesianTransform_hxx
 
 #include "itkToroidalToCartesianTransform.h"
+#include "itkImageRegionConstIteratorWithIndex.h"
 
 namespace itk
 {
@@ -95,6 +112,40 @@ TransformPoint(const InputPointType &point) const
   return opoint;
 }
 
-} // namespace
+template< typename TScalarType, unsigned int NDimensions >
+template< typename TImage >
+typename ToroidalToCartesianTransform< TScalarType, NDimensions >::BoundsArrayType
+ToroidalToCartesianTransform<TScalarType, NDimensions>
+::ComputeBounds(const TImage * image, const Self * t2c)
+{
+  typedef TImage ImageType;
+  MeshType::Pointer mesh = MeshType::New();
+  ImageRegionConstIteratorWithIndex<ImageType> imageIterator(image,image->GetLargestPossibleRegion());
+  while(!imageIterator.IsAtEnd())
+  {
+    typename ImageType::IndexType index = imageIterator.GetIndex();
+    typename ImageType::PointType p;
+    p[0] = index[0];
+    p[1] = index[1];
+    p[2] = index[2];
+    typename ImageType::PointType p_cart = t2c->TransformPoint(p);
+
+    unsigned long i = mesh->GetNumberOfPoints();
+    mesh->SetPoint(i, p_cart);
+    ++imageIterator;
+  }
+  typename MeshType::PointsContainer::Pointer points = mesh->GetPoints();
+
+  typename BoundingBoxType::Pointer boundingBox = BoundingBoxType::New();
+
+  boundingBox->SetPoints(points);
+  boundingBox->ComputeBoundingBox();
+
+  BoundsArrayType bounds = boundingBox->GetBounds();
+
+  return bounds;
+}
+
+} // namespace itk
 
 #endif

@@ -31,7 +31,7 @@ class KretzImageIOFactory: public ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
-  typedef KretzImageIOFactory         Self;
+  typedef KretzImageIOFactory        Self;
   typedef ObjectFactoryBase          Superclass;
   typedef SmartPointer< Self >       Pointer;
   typedef SmartPointer< const Self > ConstPointer;
@@ -46,7 +46,7 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(KretzImageIOFactory, ObjectFactoryBase);
-      
+
   void KretzImageIOFactoryRegister__Private(void);
 
   /** Register one factory of this type  */
@@ -67,4 +67,3 @@ private:
 } // end namespace itk
 
 #endif
-

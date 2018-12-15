@@ -1,6 +1,6 @@
-set(3DUltrasound_SRCS
-	itkKretzImageIO.cxx 
-	itkKretzImageIOFactory.cxx
-	)
+set(IOKretz_SRCS
+  itkKretzImageIO.cxx
+  itkKretzImageIOFactory.cxx
+  )
 
-itk_module_add_library(ITK3DUltrasound ${3DUltrasound_SRCS})
+itk_module_add_library(IOKretz ${IOKretz_SRCS})
