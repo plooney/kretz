@@ -1,3 +1,20 @@
+/*=========================================================================
+ *
+ *  Copyright Insight Software Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *=========================================================================*/
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkImage.h"
@@ -51,8 +68,8 @@ int execute(std::string filename, std::string filename_out, std::string filename
     std::cout << filename_cartesian << std::endl;
     typedef itk::ToroidalToCartesianTransform<double,Dimension> T2CTransformType;
     T2CTransformType::Pointer t2c = T2CTransformType::New();
-    t2c->SetBModeRadius(kretzImageIO->GetrD());
-    t2c->SetSweepRadius(kretzImageIO->GetrBstart());
+    t2c->SetBModeRadius(kretzImageIO->GetRadiusD());
+    t2c->SetSweepRadius(kretzImageIO->GetRadiusBStart());
     t2c->SetResolution(kretzImageIO->GetResolution());
     t2c->SetTablePhi(kretzImageIO->m_TableAnglesPhi);
     t2c->SetTableTheta(kretzImageIO->m_TableAnglesTheta);
