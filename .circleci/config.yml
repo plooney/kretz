@@ -9,7 +9,7 @@ jobs:
           path: /kretz
       - run:
           name: install
-          command: compgen -c
+          command: uname -r
       - run:
           name: Fetch CTest driver script
           command: |
