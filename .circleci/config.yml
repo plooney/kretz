@@ -43,6 +43,7 @@ jobs:
           no_output_timeout: 1.0h
           command: |
             mkdir /examples-build
+            sudo apt-get install libboost-dev
             cd /examples-build
             cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DITK_DIR=/ITK-build /kretz/examples/
             ninja
