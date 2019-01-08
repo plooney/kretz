@@ -9,7 +9,7 @@ jobs:
           path: /kretz
       - run:
           name: install
-          command: 'rpm install libboost-dev'
+          command: 'dpkg install libboost-dev'
       - run:
           name: Fetch CTest driver script
           command: |
