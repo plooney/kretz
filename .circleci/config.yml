@@ -9,7 +9,7 @@ jobs:
           path: /kretz
       - run:
           name: install
-          command: 'brew install libboost-dev'
+          command: 'aptitude install libboost-dev'
       - run:
           name: Fetch CTest driver script
           command: |
