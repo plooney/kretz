@@ -9,7 +9,7 @@ jobs:
           path: /kretz
       - run:
           name: install
-          command: 'yum install libboost-dev'
+          command: 'apt install libboost-dev'
       - run:
           name: Fetch CTest driver script
           command: |
