@@ -4,9 +4,13 @@ jobs:
     working_directory: /kretz-build
     docker:
       - image: insighttoolkit/module-ci:latest
+      - image: insighttoolkit/ci-linux-ubuntu18.04
     steps:
       - checkout:
           path: /kretz
+      - run:
+          name: install
+          command: uname -r
       - run:
           name: Fetch CTest driver script
           command: |
@@ -35,16 +39,18 @@ jobs:
           name: Build and Test
           no_output_timeout: 1.0h
           command: |
-            ctest -j 2 -VV -S dashboard.cmake
-      - run:
-          name: Test example programs
-          no_output_timeout: 1.0h
-          command: |
-            mkdir /examples-build
-            cd /examples-build
-            cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DITK_DIR=/ITK-build /kretz/examples/
+            cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DITK_DIR=/ITK-build -DBUILD_TESTING:BOOL=ON /kretz
             ninja
             ctest
+#      - run:
+#          name: Test example programs
+#          no_output_timeout: 1.0h
+#          command: |
+#            mkdir /examples-build
+#            cd /examples-build
+#            cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DITK_DIR=/ITK-build /kretz/examples/
+#            ninja
+#            ctest
 
 workflows:
     version: 2
