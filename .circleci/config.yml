@@ -3,7 +3,7 @@ jobs:
   build-and-test:
     working_directory: /kretz-build
     docker:
-      - image: insighttoolkit/module-ci:latest
+      - image: insighttoolkit/ci-linux-ubuntu18.04
     steps:
       - checkout:
           path: /kretz
