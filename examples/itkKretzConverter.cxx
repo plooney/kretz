@@ -81,7 +81,7 @@ ImageType::Pointer createMaskImage(ImageType::Pointer image)
 }
 
 
-int execute(std::string filename, std::string filename_out, std::vector<int> size_vec,std::vector<float> resol_vec, bool flagMask, bool flagNormalise, bool IsDoppler)
+int execute(std::string filename, std::string filename_out, std::vector<int> size_vec,std::vector<float> resol_vec, bool flagMask, bool flagNormalise, bool IsDoppler, std::string filename_toroidal_nii)
 {
   typedef itk::ImageFileReader< ImageType > ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
@@ -110,8 +110,13 @@ int execute(std::string filename, std::string filename_out, std::vector<int> siz
     reader->SetImageIO( kretzImageIO );
     reader->Update();
     toroidalImage = reader->GetOutput();
+  } else if(filename_toroidal_nii != ""){
+    reader = ReaderType::New();
+    reader->SetFileName( filename_toroidal_nii );
+    reader->Update();
+    toroidalImage = reader->GetOutput();
   }
-
+ 
   std::cout << "size " << size_vec.size() << std::endl;
   std::cout << "resol " << resol_vec.size() << std::endl;
 
@@ -250,7 +255,7 @@ int execute(std::string filename, std::string filename_out, std::vector<int> siz
 int main(int argc, char ** argv)
 {
 
-    std::string filename, filename_out;
+    std::string filename, filename_out, filename_toroidal_nii;
     std::vector<int> size_vec(3);
     std::vector<float> resol_vec(3);
 
@@ -269,6 +274,7 @@ int main(int argc, char ** argv)
             ("mask,m", po::bool_switch(&flagMask), "mask volume")
             ("normalise,n", po::bool_switch(&flagNormalise), "normalise volume")
             ("IsDoppler,d", po::bool_switch(&flagDoppler), "output power Doppler")
+            ("toroidal_image_nii,t", po::value<std::string>(&filename_toroidal_nii), "set toroidal input file")
             ;
 
     try
@@ -284,7 +290,7 @@ int main(int argc, char ** argv)
 
         po::notify(vm);
 
-        return execute(filename,filename_out,size_vec,resol_vec,flagMask,flagNormalise,flagDoppler);
+        return execute(filename,filename_out,size_vec,resol_vec,flagMask,flagNormalise,flagDoppler,filename_toroidal_nii);
 
     }
     catch(std::exception& e)
