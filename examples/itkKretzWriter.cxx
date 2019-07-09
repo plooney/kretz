@@ -22,6 +22,8 @@
 #include "itkKretzImageIO.h"
 #include "itkKretzImageIOFactory.h"
 #include "itkToroidalToCartesianTransform.h"
+#include <itkCastImageFilter.h>
+#include <itkNormalizeImageFilter.h>
 #include <itkResampleImageFilter.h>
 #include "itkNearestNeighborInterpolateImageFunction.h"
 #include <list>
@@ -30,7 +32,7 @@
 
 namespace po = boost::program_options;
 
-int execute(std::string filename, std::string filename_out, std::string filename_cartesian)
+int execute(std::string filename, std::string filename_out, std::string filename_cartesian, bool flagNormalise)
 {
   typedef unsigned char InputPixelType;
   const unsigned int   Dimension = 3;
@@ -105,6 +107,30 @@ int execute(std::string filename, std::string filename_out, std::string filename
       return EXIT_FAILURE;
     }
   } 
+  else if(flagNormalise){ //if normalised images wanted outpu double image type
+
+    typedef itk::ImageFileWriter<DoubleImageType> ImageWriterType;
+    typedef itk::CastImageFilter<InputImageType,DoubleImageType> CastImageFilterType;
+    typedef itk::NormalizeImageFilter<DoubleImageType, DoubleImageType> NormaliseImageFilterType;
+
+    CastImageFilterType::Pointer castImgFilter = CastImageFilterType::New();
+    castImgFilter->SetInput(inputImage);
+    castImgFilter->Update();
+
+    DoubleImageType::Pointer castImage = castImgFilter->GetOutput();
+
+    NormaliseImageFilterType::Pointer normaliseFilter = NormaliseImageFilterType::New();
+    normaliseFilter->SetInput(castImage);
+    normaliseFilter->Update();
+    DoubleImageType::Pointer normImage = normaliseFilter->GetOutput();
+
+    ImageWriterType::Pointer ITKImageWriter = ImageWriterType::New();
+
+    ITKImageWriter->SetFileName(filename_out.c_str());
+    ITKImageWriter->SetInput(normImage);
+    ITKImageWriter->Write();
+
+  } 
   else //otherwise write the toroidal volume to the output file 
   {
     typedef itk::ImageFileWriter< InputImageType >  WriterType;
@@ -133,7 +159,7 @@ int main(int argc, char* argv[])
   po::options_description desc("Allowed options");
 
   //bool flagMask = false;
-  //bool flagNormalise = false;
+  bool flagNormalise = false;
   //bool flagThreshold = false;
 
   desc.add_options()
@@ -141,6 +167,7 @@ int main(int argc, char* argv[])
     ("inputfile,i", po::value<std::string>(&filename)->required(), "set input file")
     ("filename_cartesian,c", po::value<std::string>(&filename_cartesian), "set cartesian file")
     ("outputfile,o", po::value<std::string>(&filename_out)->required(), "set output file")
+    ("normalise,n", po::bool_switch(&flagNormalise), "normalise volume")
     ;
 
   try
@@ -156,7 +183,7 @@ int main(int argc, char* argv[])
 
     po::notify(vm);
 
-    return execute(filename, filename_out, filename_cartesian);
+    return execute(filename, filename_out, filename_cartesian, flagNormalise);
 
   }
   catch(std::exception& e)
