@@ -30,6 +30,7 @@
 #include "itkCartesianToToroidalTransform.h"
 #include "itkToroidalToCartesianTransform.h"
 #include "itkKretzImageIO.h"
+#include "itkNearestNeighborInterpolateImageFunction.h"
 #include <itkCastImageFilter.h>
 #include <itkNormalizeImageFilter.h>
 #include <itkInterpolateImageFunction.h>
@@ -232,8 +233,12 @@ int execute(std::string filename, std::string filename_out, std::vector<int> siz
     size[2]= size_vec[2];
 
 
+    typedef itk::NearestNeighborInterpolateImageFunction<ImageType,  double
+	    >  NearestNeighbourInterpolatorType;
     typename ResampleFilterType::Pointer resampleFilter = ResampleFilterType::New();
     resampleFilter->SetInput(toroidalImage);
+    auto interpolator = NearestNeighbourInterpolatorType::New();
+    resampleFilter->SetInterpolator(interpolator);
 
     resampleFilter->SetTransform(c2t);
     resampleFilter->SetSize(size);

@@ -32,7 +32,7 @@
 
 namespace po = boost::program_options;
 
-int execute(std::string filename, std::string filename_out, std::string filename_cartesian, bool flagNormalise)
+int execute(std::string filename, std::string filename_out, std::string filename_cartesian, bool flagNormalise, bool flagDoppler)
 {
   typedef unsigned char InputPixelType;
   const unsigned int   Dimension = 3;
@@ -44,6 +44,7 @@ int execute(std::string filename, std::string filename_out, std::string filename
   typedef itk::KretzImageIO           ImageIOType;
   ImageIOType::Pointer kretzImageIO = ImageIOType::New();
   reader->SetImageIO( kretzImageIO );
+  kretzImageIO->SetIsDoppler(flagDoppler);
   try
   {
     reader->Update();
@@ -160,6 +161,7 @@ int main(int argc, char* argv[])
 
   //bool flagMask = false;
   bool flagNormalise = false;
+  bool flagDoppler = false;
   //bool flagThreshold = false;
 
   desc.add_options()
@@ -168,6 +170,7 @@ int main(int argc, char* argv[])
     ("filename_cartesian,c", po::value<std::string>(&filename_cartesian), "set cartesian file")
     ("outputfile,o", po::value<std::string>(&filename_out)->required(), "set output file")
     ("normalise,n", po::bool_switch(&flagNormalise), "normalise volume")
+    ("doppler,d", po::bool_switch(&flagDoppler), "do doppler")
     ;
 
   try
@@ -183,7 +186,7 @@ int main(int argc, char* argv[])
 
     po::notify(vm);
 
-    return execute(filename, filename_out, filename_cartesian, flagNormalise);
+    return execute(filename, filename_out, filename_cartesian, flagNormalise, flagDoppler);
 
   }
   catch(std::exception& e)
