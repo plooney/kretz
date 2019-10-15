@@ -21,7 +21,7 @@
 
 #include <iostream>
 #include "itkTransform.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkMatrix.h"
 #include <vector>
 #include <itkArray.h>

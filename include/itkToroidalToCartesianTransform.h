@@ -22,7 +22,7 @@
 #include <iostream>
 #include "itkMesh.h"
 #include "itkTransform.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkMatrix.h"
 #include <itkBoundingBox.h>
 #include <vector>
