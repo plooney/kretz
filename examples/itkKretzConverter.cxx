@@ -111,7 +111,8 @@ int execute(std::string filename, std::string filename_out, std::vector<int> siz
     reader->SetImageIO( kretzImageIO );
     reader->Update();
     toroidalImage = reader->GetOutput();
-  } else if(filename_toroidal_nii != ""){
+  } 
+  if(filename_toroidal_nii != ""){
     reader = ReaderType::New();
     reader->SetFileName( filename_toroidal_nii );
     reader->Update();
